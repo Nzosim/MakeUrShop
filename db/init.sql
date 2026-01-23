@@ -9,10 +9,14 @@ SET NAMES utf8mb4;
 
 DROP TABLE IF EXISTS `Test`;
 CREATE TABLE `Test` (
-  `id` int NOT NULL
+  `id` int NOT NULL AUTO_INCREMENT,
+  `nom` varchar(100) NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-INSERT INTO `Test` (`id`) VALUES
-(1);
+INSERT INTO `Test` (`id`, `nom`) VALUES
+(3,	'Joan'),
+(4,	'TimOThé'),
+(5,	'Nzo');
 
--- 2026-01-23 13:28:23 UTC
+-- 2026-01-23 15:32:25 UTC

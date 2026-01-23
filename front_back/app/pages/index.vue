@@ -1,8 +1,12 @@
 <template>
-    <v-btn @click="theme.toggle()" text="Toggle Light / Dark"></v-btn>
+    <v-btn icon @click="theme.toggle()">
+        <v-icon>
+            {{ theme.global.name.value === 'light' ? 'mdi-weather-night' : 'mdi-white-balance-sunny' }}
+        </v-icon>
+    </v-btn>
 
     Test
-    <v-btn color="primary">Valider</v-btn>
+    <v-btn color="primary" to="/test/test">Go test page</v-btn>
 </template>
 
 <script setup>

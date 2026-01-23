@@ -3,16 +3,16 @@
     "files": [],
     "references": [
         {
-            "path": "./frontend/.nuxt/tsconfig.app.json"
+            "path": "./front_back/.nuxt/tsconfig.app.json"
         },
         {
-            "path": "./frontend/.nuxt/tsconfig.server.json"
+            "path": "./front_back/.nuxt/tsconfig.server.json"
         },
         {
-            "path": "./frontend/.nuxt/tsconfig.shared.json"
+            "path": "./front_back/.nuxt/tsconfig.shared.json"
         },
         {
-            "path": "./frontend/.nuxt/tsconfig.node.json"
+            "path": "./front_back/.nuxt/tsconfig.node.json"
         }
     ]
 }
