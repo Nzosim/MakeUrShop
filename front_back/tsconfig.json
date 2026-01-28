@@ -1,18 +1,4 @@
 {
     // https://nuxt.com/docs/guide/concepts/typescript
-    "files": [],
-    "references": [
-        {
-            "path": "./front_back/.nuxt/tsconfig.app.json"
-        },
-        {
-            "path": "./front_back/.nuxt/tsconfig.server.json"
-        },
-        {
-            "path": "./front_back/.nuxt/tsconfig.shared.json"
-        },
-        {
-            "path": "./front_back/.nuxt/tsconfig.node.json"
-        }
-    ]
+    "extends": "./.nuxt/tsconfig.json"
 }
