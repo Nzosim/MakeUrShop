@@ -1,0 +1,8 @@
+{
+    "config": {
+        "navBar": {
+            "categoriesNb": 3,
+            "names": ["Homme", "Femme", "Enfant"]
+        }
+    }
+}
