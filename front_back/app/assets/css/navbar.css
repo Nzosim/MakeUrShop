@@ -1,0 +1,23 @@
+.v-theme--light .icons {
+    filter: brightness(0);
+}
+
+.v-theme--dark .icons {
+    filter: brightness(0) invert(1);
+}
+
+.v-btn--active .v-btn__overlay {
+    --v-activated-opacity: 0 !important;
+}
+
+.v-btn:hover .v-btn__overlay {
+    --v-hover-opacity: 0 !important;
+}
+
+.categories {
+    font-family: 'Inter', sans-serif !important;
+    font-weight: 600 !important;
+    font-size: 1.1rem !important;
+    text-transform: none !important;
+    letter-spacing: -0.01em !important;
+}
