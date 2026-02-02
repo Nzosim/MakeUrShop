@@ -1,0 +1,9 @@
+.product-list {
+    display: flex;
+    gap: 20px;
+    width: 100%;
+}
+
+.product-list .filter {
+    width: 25%;
+}
