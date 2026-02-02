@@ -1,5 +1,5 @@
 <template>
-    <div class="product-list-container d-flex">
+    <div class="product-list-container d-flex mt-5">
         <div class="filter-section">
             <div class="filter ma-5">
                 <div class="d-flex justify-space-between">
@@ -34,7 +34,7 @@
             </div>
         </div>
 
-        <div class="products-section">
+        <div class="products-section justify-center">
             <product-list v-model:products="sortedProducts" />
         </div>
     </div>
