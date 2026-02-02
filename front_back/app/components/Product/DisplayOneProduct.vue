@@ -1,10 +1,11 @@
 <template>
-    <div>
-        <h2>{{ product.name }}</h2>
-        <p>{{ product.description }}</p>
-        <p>Price: {{ product.price }} €</p>
-        <img :src="product.url" height="200px" alt="Product Image" />
-    </div>
+    <v-card>
+        <img :src="product.url" height="400px" max-width="200px" alt="Product Image" />
+        <div class="d-flex">
+            <p>{{ product.name }}</p>
+            <p>Price: {{ product.price }} €</p>
+        </div>
+    </v-card>
 </template>
 
 <script setup>
