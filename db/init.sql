@@ -49,6 +49,12 @@ CREATE TABLE address (
     FOREIGN KEY (user_id) REFERENCES user(id)
 ) ENGINE=InnoDB;
 
+DROP TABLE IF EXISTS brand;
+CREATE TABLE brand (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(150) NOT NULL
+) ENGINE=InnoDB;
+
 DROP TABLE IF EXISTS category;
 CREATE TABLE category (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -61,21 +67,23 @@ DROP TABLE IF EXISTS product;
 CREATE TABLE product (
     id INT AUTO_INCREMENT PRIMARY KEY,
     category_id INT NOT NULL,
+    brand_id INT,
     name VARCHAR(255) NOT NULL,
     description TEXT,
     price DECIMAL(10,2) NOT NULL,
-    stock_id INT,
     type ENUM('classique', 'enchere') NOT NULL,
     actif BOOLEAN DEFAULT FALSE,
     creation_date DATETIME DEFAULT CURRENT_TIMESTAMP,
     image INT,
-    FOREIGN KEY (category_id) REFERENCES category(id)
+    FOREIGN KEY (category_id) REFERENCES category(id),
+    FOREIGN KEY (brand_id) REFERENCES brand(id)
 ) ENGINE=InnoDB;
 
 DROP TABLE IF EXISTS stock;
 CREATE TABLE stock (
     id INT AUTO_INCREMENT PRIMARY KEY,
     product_id INT NOT NULL,
+    size VARCHAR(10),
     stock_number INT NOT NULL,
     FOREIGN KEY (product_id) REFERENCES product(id)
 ) ENGINE=InnoDB;
@@ -206,36 +214,56 @@ VALUES
 
 
 
-INSERT INTO product (category_id, name, description, price, type, actif)
+-- Marques
+INSERT INTO brand (name) VALUES
+('Nike'),
+('Adidas'),
+('Puma'),
+('H&M'),
+('Zara'),
+('Tommy Hilfiger'),
+('Calvin Klein');
+
+
+
+INSERT INTO product (category_id, brand_id, name, description, price, type, actif)
 VALUES
 -- Homme
-(4, 'T-shirt Homme Basic', 'T-shirt coton 100%', 19.99, 'classique', TRUE),
-(5, 'Jean Homme Slim', 'Jean slim bleu', 49.99, 'classique', TRUE),
-(6, 'Veste Homme Mi-saison', 'Veste légère', 89.99, 'classique', TRUE),
+(4, 1, 'T-shirt Homme Basic', 'T-shirt coton 100%', 19.99, 'classique', TRUE),
+(5, 4, 'Jean Homme Slim', 'Jean slim bleu', 49.99, 'classique', TRUE),
+(6, 2, 'Veste Homme Mi-saison', 'Veste légère', 89.99, 'classique', TRUE),
+(4, 1, 'T-shirt Homme Basic V2', 'T-shirt coton 100%', 19.99, 'classique', TRUE),
+(5, 4, 'Jean Homme Slim V2', 'Jean slim bleu', 49.99, 'classique', TRUE),
+(6, 2, 'Veste Homme Mi-saison V2', 'Veste légère', 89.99, 'classique', TRUE),
 
 -- Femme
-(8, 'Robe Femme Été', 'Robe fluide', 59.99, 'classique', TRUE),
-(9, 'Top Femme Blanc', 'Top manches courtes', 24.99, 'classique', TRUE),
-(10, 'Jupe Femme Plissée', 'Jupe mi-longue', 39.99, 'enchere', TRUE),
+(8, 5, 'Robe Femme Été', 'Robe fluide', 59.99, 'classique', TRUE),
+(9, 6, 'Top Femme Blanc', 'Top manches courtes', 24.99, 'classique', TRUE),
+(10, 5, 'Jupe Femme Plissée', 'Jupe mi-longue', 39.99, 'enchere', TRUE),
 
 -- Enfant
-(12, 'T-shirt Enfant Fun', 'T-shirt imprimé', 14.99, 'classique', TRUE),
-(13, 'Pantalon Enfant', 'Pantalon confortable', 29.99, 'classique', TRUE),
-(14, 'Veste Enfant Hiver', 'Veste chaude', 79.99, 'enchere', TRUE);
+(12, 3, 'T-shirt Enfant Fun', 'T-shirt imprimé', 14.99, 'classique', TRUE),
+(13, 2, 'Pantalon Enfant', 'Pantalon confortable', 29.99, 'classique', TRUE),
+(14, 1, 'Veste Enfant Hiver', 'Veste chaude', 79.99, 'enchere', TRUE);
 
 
 
-INSERT INTO stock (product_id, stock_number)
+INSERT INTO stock (product_id, size, stock_number)
 VALUES
-(1, 50),
-(2, 30),
-(3, 15),
-(4, 20),
-(5, 40),
-(6, 10),
-(7, 60),
-(8, 25),
-(9, 8);
+(1, 'S', 30),
+(1, 'M', 50),
+(1, 'L', 40),
+(2, 'M', 30),
+(2, 'L', 25),
+(2, 'XL', 20),
+(3, 'L', 15),
+(3, 'XL', 10),
+(4, 'M', 20),
+(5, 'L', 40),
+(6, 'XL', 10),
+(7, 'S', 60),
+(8, 'M', 25),
+(9, 'L', 8);
 
 
 
@@ -245,12 +273,15 @@ VALUES
 (1, 'https://www.lapolemik.com/4295/t-shirt-homme-basic-citadel-blue.jpg'),
 (2, 'https://www.vibs.com/on/demandware.static/-/Sites-Bonobo_master/default/dw0ca89ecb/jeans-slim-ultra-stretch-denim-stone-homme-vue1-36125211151230242.jpg'),
 (3, 'https://www.gardedenfantspourtous.fr/wp-content/uploads/2022/06/veste-homme-mi-saison-686vso-1.jpg'),
-(4, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRP8oaSDIicR1Enfndo9l2bc9laui4PIXNfYw&s'),
-(5, 'https://images.etam.com/on/demandware.static/-/Sites-ELIN-master/default/dwb225c2c6/654542301_a.jpg?sw=1000&sh=1510'),
-(6, 'https://medias.afibel.com/fr/media/6/5/jupe-longue-metallisee-plissee--65581_SF1_S-20240911104706.jpg?twic=v1/quality=85/cover=500x667'),
-(7, 'https://m.media-amazon.com/images/I/6193-P7FPJL._AC_UY350_.jpg'),
-(8, 'https://m.media-amazon.com/images/I/61HVV5nJWvL._AC_UY1000_.jpg'),
-(9, 'https://www.lespetitsbaroudeurs.com/37852-large_default/veste-serkkula-reima.jpg');
+(4, 'https://www.lapolemik.com/4295/t-shirt-homme-basic-citadel-blue.jpg'),
+(5, 'https://www.vibs.com/on/demandware.static/-/Sites-Bonobo_master/default/dw0ca89ecb/jeans-slim-ultra-stretch-denim-stone-homme-vue1-36125211151230242.jpg'),
+(6, 'https://www.gardedenfantspourtous.fr/wp-content/uploads/2022/06/veste-homme-mi-saison-686vso-1.jpg'),
+(7, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRP8oaSDIicR1Enfndo9l2bc9laui4PIXNfYw&s'),
+(8, 'https://images.etam.com/on/demandware.static/-/Sites-ELIN-master/default/dwb225c2c6/654542301_a.jpg?sw=1000&sh=1510'),
+(9, 'https://medias.afibel.com/fr/media/6/5/jupe-longue-metallisee-plissee--65581_SF1_S-20240911104706.jpg?twic=v1/quality=85/cover=500x667'),
+(10, 'https://m.media-amazon.com/images/I/6193-P7FPJL._AC_UY350_.jpg'),
+(11, 'https://m.media-amazon.com/images/I/61HVV5nJWvL._AC_UY1000_.jpg'),
+(12, 'https://www.lespetitsbaroudeurs.com/37852-large_default/veste-serkkula-reima.jpg');
 
 
 

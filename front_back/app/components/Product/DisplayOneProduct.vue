@@ -1,9 +1,11 @@
 <template>
-    <v-card>
-        <img :src="product.url" height="400px" max-width="200px" alt="Product Image" />
-        <div class="d-flex">
-            <p>{{ product.name }}</p>
-            <p>Price: {{ product.price }} €</p>
+    <v-card class="product-card" elevation="2">
+        <div class="product-image-container">
+            <img :src="product.url" :alt="product.name" class="product-image" />
+        </div>
+        <div class="product-info pa-4">
+            <h4 class="product-name mb-2">{{ product.name }}</h4>
+            <p class="product-price">{{ product.price }} €</p>
         </div>
     </v-card>
 </template>
@@ -12,8 +14,6 @@
     const props = defineProps({
         product: Object,
     });
-
-    console.log(props.product);
 
     const emit = defineEmits(['update:product']);
 </script>
