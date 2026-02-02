@@ -4,7 +4,7 @@ export default defineNuxtConfig({
     devtools: { enabled: true },
     ssr: false,
     modules: ['vuetify-nuxt-module'],
-    css: ['vuetify/styles', '@mdi/font/css/materialdesignicons.css'],
+    css: ['vuetify/styles', '@mdi/font/css/materialdesignicons.css', './app/assets/css/Product/Display.css', './app/assets/css/main.css', './app/assets/css/navbar.css'],
     vuetify: {
         moduleOptions: {
             /* module specific options */
