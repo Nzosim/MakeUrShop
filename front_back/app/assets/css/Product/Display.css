@@ -4,8 +4,9 @@
     width: 100%;
 }
 
-.product-list .filter {
-    width: 25%;
+.filter-section {
+    width: 25% !important;
+    margin-left: 30px;
 }
 
 .size p {

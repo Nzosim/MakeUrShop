@@ -1,5 +1,5 @@
 <template>
-    <div class="product-list-container d-flex">
+    <div class="product-list-container d-flex mt-5">
         <div class="filter-section">
             <div class="filter ma-5">
                 <div class="d-flex justify-space-between">
@@ -34,14 +34,17 @@
             </div>
         </div>
 
-        <div class="products-section">
+        <div class="products-section justify-center">
             <product-list v-model:products="sortedProducts" />
         </div>
     </div>
 </template>
 
 <script setup>
-    const { data } = await useFetch('/api/product/getProduct?id=1');
+    const route = useRoute();
+    const categoryId = route.params.id;
+
+    const { data } = await useFetch(`/api/product/getProduct?id=${categoryId}`);
 
     const items = [{ title: 'Meilleures ventes' }, { title: 'Prix croissant' }, { title: 'Prix décroissant' }, { title: 'Ordre Alphabétique' }];
     const selectedItem = ref(items[0]);
