@@ -1,6 +1,5 @@
 <template>
     Article Homme
-
     <product-list v-model:products="data" />
 </template>
 
