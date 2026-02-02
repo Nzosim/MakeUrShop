@@ -17,12 +17,16 @@
         <v-spacer />
         <v-toolbar-items>
             <v-btn icon @click="theme.toggle()">
-                <v-icon>
+                <v-icon size="25">
                     {{ theme.global.name.value === 'light' ? 'mdi-weather-night' : 'mdi-white-balance-sunny' }}
                 </v-icon>
             </v-btn>
-            <v-btn text to="/User/User" width="90">
-                <v-icon size="25">mdi-account</v-icon>
+
+            <v-btn text to="/Cart">
+                <v-icon size="25">mdi mdi-cart-outline</v-icon>
+            </v-btn>
+            <v-btn text to="/User/User">
+                <v-icon size="25">mdi mdi-account-outline</v-icon>
             </v-btn>
         </v-toolbar-items>
     </v-toolbar>
@@ -32,4 +36,8 @@
     import { useTheme } from 'vuetify';
     const theme = useTheme();
     import configData from '/assets/config.json';
+    import { ref } from 'vue';
+
+    const showSearch = ref(false);
+    const searchQuery = ref('');
 </script>
