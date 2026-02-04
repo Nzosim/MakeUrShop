@@ -1,7 +1,10 @@
 <template>
     <v-app>
         <Navbar />
-        <NuxtPage />
+        <v-main>
+            <slot />
+            <NuxtPage />
+        </v-main>
     </v-app>
 </template>
 

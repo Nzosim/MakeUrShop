@@ -10,10 +10,6 @@
     --v-activated-opacity: 0 !important;
 }
 
-.v-btn:hover .v-btn__overlay {
-    --v-hover-opacity: 0 !important;
-}
-
 .categories {
     font-family: 'Inter', sans-serif !important;
     font-weight: 600 !important;

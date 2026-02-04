@@ -1,14 +1,24 @@
 <template>
-    <v-toolbar :elevation="8" class="px-4">
+    <v-navigation-drawer v-model="drawer" temporary color="surface">
+        <v-list>
+            <v-list-item v-for="(name, index) in configData.config.navBar.names" :key="index" :to="`/Product/${index + 1}`" @click="drawer = false">
+                <v-list-item-title>{{ name }}</v-list-item-title>
+            </v-list-item>
+        </v-list>
+    </v-navigation-drawer>
+
+    <v-app-bar :elevation="8" color="surface" class="px-4">
         <div class="d-flex align-center nav-side-block">
-            <v-btn text to="/" ripple="false" variant="plain" class="pa-0">
+            <v-app-bar-nav-icon class="d-md-none mr-2" @click="drawer = !drawer" />
+
+            <v-btn text to="/" ripple="false" class="pa-0">
                 <img src="/assets/img/small_logo_makeurshop.png" class="icons" height="40" alt="Logo" />
             </v-btn>
         </div>
 
         <v-spacer />
 
-        <div class="nav-center-categories">
+        <div class="nav-center-categories d-none d-md-flex">
             <v-btn v-for="(name, index) in configData.config.navBar.names" :key="index" text :to="`/Product/${index + 1}`" class="categories" ripple="false">
                 {{ name }}
             </v-btn>
@@ -31,14 +41,16 @@
                 <v-icon size="22">mdi-account-outline</v-icon>
             </v-btn>
         </div>
-    </v-toolbar>
+    </v-app-bar>
 </template>
 
 <script setup>
     import { useTheme } from 'vuetify';
-    const theme = useTheme();
-    import configData from '/assets/config.json';
     import { ref } from 'vue';
+    import configData from '/assets/config.json';
+
+    const theme = useTheme();
+    const drawer = ref(false);
 
     const showSearch = ref(false);
     const searchQuery = ref('');
