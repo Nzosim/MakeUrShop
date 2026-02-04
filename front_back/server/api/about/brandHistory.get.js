@@ -4,7 +4,7 @@ import { marked } from 'marked';
 
 export default defineEventHandler(async () => {
     try {
-        const filePath = join(process.cwd(), 'app', 'contents', 'common', 'brand_description.md');
+        const filePath = join(process.cwd(), 'app', 'contents', 'about', 'brand_history.md');
         const mdContent = await readFile(filePath, 'utf8');
 
         const htmlContent = marked.parse(mdContent);

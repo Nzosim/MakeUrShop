@@ -1,6 +1,9 @@
 <template>
     <v-app>
         <Navbar />
+        <client-only>
+            <LoadingScreen :loading="isLoading" />
+        </client-only>
         <v-main>
             <slot />
             <NuxtPage />
@@ -12,4 +15,17 @@
 <script setup>
     import Navbar from './components/Main/Navbar.vue';
     import Footer from './components/Main/Footer.vue';
+    import LoadingScreen from './components/Main/LoadingScreen.vue';
+    const nuxtApp = useNuxtApp();
+    const isLoading = ref(false);
+
+    nuxtApp.hook('page:start', () => {
+        isLoading.value = true;
+    });
+
+    nuxtApp.hook('page:finish', () => {
+        setTimeout(() => {
+            isLoading.value = false;
+        }, 300);
+    });
 </script>
