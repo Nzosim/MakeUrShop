@@ -1,0 +1,7 @@
+MakeUrShop est une marque de vêtements contemporaine née de l’envie de repousser les codes du streetwear moderne.
+
+Pensée pour celles et ceux qui veulent affirmer leur identité sans compromis, la marque propose des pièces au design épuré, aux coupes soignées et aux détails subtils.
+
+Inspirée par la culture urbaine, la créativité digitale et l’esprit indépendant, MakeUrShop mêle confort, qualité et esthétique minimaliste.
+
+Chaque collection est conçue comme un terrain d’expression, où les matières sélectionnées et les lignes modernes s’adaptent à un mode de vie dynamique et authentique.

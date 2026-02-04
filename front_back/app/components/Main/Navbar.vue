@@ -1,8 +1,8 @@
 <template>
     <v-navigation-drawer v-model="drawer" temporary color="surface">
         <v-list>
-            <v-list-item v-for="(name, index) in configData.config.navBar.names" :key="index" :to="`/Product/${index + 1}`" @click="drawer = false">
-                <v-list-item-title>{{ name }}</v-list-item-title>
+            <v-list-item v-for="category in categories" :key="category.id" :to="`/Product/${category.id}`" @click="drawer = false">
+                <v-list-item-title>{{ category.name }}</v-list-item-title>
             </v-list-item>
         </v-list>
     </v-navigation-drawer>
@@ -19,8 +19,8 @@
         <v-spacer />
 
         <div class="nav-center-categories d-none d-md-flex">
-            <v-btn v-for="(name, index) in configData.config.navBar.names" :key="index" text :to="`/Product/${index + 1}`" class="categories" ripple="false">
-                {{ name }}
+            <v-btn v-for="category in categories" :key="category.id" text :to="`/Product/${category.id}`" class="categories" ripple="false">
+                {{ category.name }}
             </v-btn>
         </div>
 
@@ -52,6 +52,5 @@
     const theme = useTheme();
     const drawer = ref(false);
 
-    const showSearch = ref(false);
-    const searchQuery = ref('');
+    const { data: categories } = await useFetch('/api/navbar/getCategories');
 </script>
