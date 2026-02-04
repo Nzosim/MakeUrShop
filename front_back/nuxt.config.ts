@@ -29,10 +29,10 @@ export default defineNuxtConfig({
                     dark: {
                         colors: {
                             background: '#151515',
-                            surface: '#000000',
-                            primary: '#AA64AB',
+                            surface: '#151515',
+                            primary: '#623A62',
                             secondary: '#8485A8',
-                            accent: '#422740',
+                            accent: '#C996C5',
                         },
                     },
                 },
