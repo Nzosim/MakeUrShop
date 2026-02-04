@@ -1,5 +1,3 @@
-# L'Histoire de MakeUrShop : Du Pixel au Textile
-
 ## Le Manifeste du "User-Centric"
 
 Tout a commencé dans un studio de création encombré, entre deux lignes de code et des croquis éparpillés. À l’origine de **MakeUrShop**, il n'y avait pas seulement l’envie de créer des vêtements, mais celle de répondre à une frustration : celle d'une mode urbaine devenue soit trop générique, soit trop complexe.

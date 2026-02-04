@@ -9,12 +9,13 @@
                 <v-img src="/assets/img/small_logo_makeurshop.png" width="150" elevation="8" class="mx-auto mt-8 rounded-xl icons"></v-img>
             </v-col>
         </v-row>
-        <h1 class="my-12">NOTRE HISTOIRE</h1>
-        <v-row>
-            <v-col cols="12" md="5">
+        <v-row class="my-12">
+            <v-col cols="12" md="5" class="align-self-center">
                 <v-img src="/contents/about/timeline.png" elevation="8" class="mx-auto mt-8 rounded-xl"></v-img>
             </v-col>
             <v-col cols="12" md="7">
+                <h1 class="my-12">NOTRE HISTOIRE</h1>
+
                 <div v-if="history" v-html="history.content" class="md-description"></div>
             </v-col>
         </v-row>
