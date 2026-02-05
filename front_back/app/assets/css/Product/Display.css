@@ -85,6 +85,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    position: relative;
 }
 
 .product-image {
@@ -112,7 +113,25 @@
 
 .product-price {
     font-size: 18px;
-    font-weight: 700;
-    color: #e53935;
+    font-weight: 200;
     margin: 0;
+}
+
+.out-of-stock .product-image,
+.out-of-stock .product-info {
+    opacity: 0.4;
+}
+
+.soldout {
+    background-color: rgb(199, 53, 53);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 12px;
+    display: inline-block;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 100;
+    font-size: 12px;
+    font-weight: 700;
 }

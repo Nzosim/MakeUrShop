@@ -83,6 +83,12 @@
             sorted = sorted.filter((product) => product.brand_name === selectedBrand.value);
         }
 
+        // Filter by size stock
+        if (size.value) {
+            const stockKey = `taille_${size.value}`;
+            sorted = sorted.filter((product) => (product?.[stockKey] ?? 0) > 0);
+        }
+
         switch (selectedItem.value.title) {
             case 'Prix croissant':
                 return sorted.sort((a, b) => a.price - b.price);
