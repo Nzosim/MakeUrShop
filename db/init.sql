@@ -71,6 +71,7 @@ CREATE TABLE product (
     name VARCHAR(255) NOT NULL,
     description TEXT,
     price DECIMAL(10,2) NOT NULL,
+    sale_price INT NOT NULL,
     type ENUM('classique', 'enchere') NOT NULL,
     actif BOOLEAN DEFAULT FALSE,
     creation_date DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -226,25 +227,25 @@ INSERT INTO brand (name) VALUES
 
 
 
-INSERT INTO product (category_id, brand_id, name, description, price, type, actif)
+INSERT INTO product (category_id, brand_id, name, description, price, sale_price, type, actif)
 VALUES
 -- Homme
-(4, 1, 'T-shirt Homme Basic', 'T-shirt coton 100%', 19.99, 'classique', TRUE),
-(5, 4, 'Jean Homme Slim', 'Jean slim bleu', 49.99, 'classique', TRUE),
-(6, 2, 'Veste Homme Mi-saison', 'Veste légère', 89.99, 'classique', TRUE),
-(4, 1, 'T-shirt Homme Basic V2', 'T-shirt coton 100%', 19.99, 'classique', TRUE),
-(5, 4, 'Jean Homme Slim V2', 'Jean slim bleu', 49.99, 'classique', TRUE),
-(6, 2, 'Veste Homme Mi-saison V2', 'Veste légère', 89.99, 'classique', TRUE),
+(4, 1, 'T-shirt Homme Basic', 'T-shirt coton 100%', 19.99, 0, 'classique', TRUE),
+(5, 4, 'Jean Homme Slim', 'Jean slim bleu', 49.99, 0, 'classique', TRUE),
+(6, 2, 'Veste Homme Mi-saison', 'Veste légère', 89.99, 20, 'classique', TRUE),
+(4, 1, 'T-shirt Homme Basic V2', 'T-shirt coton 100%', 19.99, 0, 'classique', TRUE),
+(5, 4, 'Jean Homme Slim V2', 'Jean slim bleu', 49.99, 0, 'classique', TRUE),
+(6, 2, 'Veste Homme Mi-saison V2', 'Veste légère', 89.99, 0, 'classique', TRUE),
 
 -- Femme
-(8, 5, 'Robe Femme Été', 'Robe fluide', 59.99, 'classique', TRUE),
-(9, 6, 'Top Femme Blanc', 'Top manches courtes', 24.99, 'classique', TRUE),
-(10, 5, 'Jupe Femme Plissée', 'Jupe mi-longue', 39.99, 'enchere', TRUE),
+(8, 5, 'Robe Femme Été', 'Robe fluide', 59.99, 0, 'classique', TRUE),
+(9, 6, 'Top Femme Blanc', 'Top manches courtes', 24.99, 0, 'classique', TRUE),
+(10, 5, 'Jupe Femme Plissée', 'Jupe mi-longue', 39.99, 0, 'enchere', TRUE),
 
 -- Enfant
-(12, 3, 'T-shirt Enfant Fun', 'T-shirt imprimé', 14.99, 'classique', TRUE),
-(13, 2, 'Pantalon Enfant', 'Pantalon confortable', 29.99, 'classique', TRUE),
-(14, 1, 'Veste Enfant Hiver', 'Veste chaude', 79.99, 'enchere', TRUE);
+(12, 3, 'T-shirt Enfant Fun', 'T-shirt imprimé', 14.99, 0, 'classique', TRUE),
+(13, 2, 'Pantalon Enfant', 'Pantalon confortable', 29.99, 0, 'classique', TRUE),
+(14, 1, 'Veste Enfant Hiver', 'Veste chaude', 79.99, 0, 'enchere', TRUE);
 
 
 

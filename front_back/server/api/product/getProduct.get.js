@@ -12,6 +12,7 @@ export default defineEventHandler(async (event) => {
             p.name,
             p.description,
             p.price,
+            p.sale_price,
             p.actif,
             b.name AS brand_name,
             MIN(i.url) AS url,

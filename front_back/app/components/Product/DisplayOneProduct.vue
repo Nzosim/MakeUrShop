@@ -3,10 +3,15 @@
         <div class="product-image-container">
             <img :src="product.url" :alt="product.name" class="product-image" />
             <p v-if="!isStock" class="soldout">Rupture de stock</p>
+            <p v-if="isSolde" class="soldout">Solde</p>
         </div>
         <div class="product-info pa-4">
             <h4 class="product-name mb-2">{{ product.name }}</h4>
-            <p class="product-price">{{ product.price }} €</p>
+            <div class="d-flex">
+                <p class="product-price" :class="{ 'product-solde': isSolde }">{{ product.price }} €</p>
+                <p v-if="isSolde" class="product-solde-number ml-2">-{{ product.sale_price }}%</p>
+                <p v-if="isSolde" class="product-number ml-2">{{ (product.price - (product.price * product.sale_price) / 100).toFixed(2) }} €</p>
+            </div>
         </div>
     </v-card>
 </template>
@@ -20,5 +25,9 @@
 
     const isStock = computed(() => {
         return props.product.taille_S > 0 || props.product.taille_M > 0 || props.product.taille_L > 0 || props.product.taille_XL > 0;
+    });
+
+    const isSolde = computed(() => {
+        return props.product.sale_price > 0 && isStock;
     });
 </script>
