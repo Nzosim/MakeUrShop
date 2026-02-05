@@ -12,7 +12,7 @@
             {{ link.title }}
         </v-btn>
         <div class="flex-1-0-100 text-center mt-2">
-            {{ new Date().getFullYear() }} —
+            {{ new Date().getFullYear() }} — ©
             <strong>{{ storeName }}</strong>
             — {{ storeEmail }}
         </div>
@@ -28,5 +28,6 @@
         { title: 'POLITIQUE DE CONFIDENTIALITÉ', url: '/privacy-policy' },
         { title: 'FAQ', url: '/faq' },
         { title: 'NOUS CONTACTER', url: `mailto:${storeEmail}` },
+        { title: 'A PROPOS', url: `/About` },
     ];
 </script>
