@@ -23,14 +23,21 @@
                 </div>
                 <h4 class="mt-5 mb-2">Taille</h4>
                 <div class="size d-flex ga-1">
-                    <p @click="size = 'S'" :class="{ active: size === 'S' }">S</p>
-                    <p @click="size = 'M'" :class="{ active: size === 'M' }">M</p>
-                    <p @click="size = 'L'" :class="{ active: size === 'L' }">L</p>
-                    <p @click="size = 'XL'" :class="{ active: size === 'XL' }">XL</p>
+                    <p @click="toggleSize('S')" :class="{ active: size === 'S' }">S</p>
+                    <p @click="toggleSize('M')" :class="{ active: size === 'M' }">M</p>
+                    <p @click="toggleSize('L')" :class="{ active: size === 'L' }">L</p>
+                    <p @click="toggleSize('XL')" :class="{ active: size === 'XL' }">XL</p>
                 </div>
 
                 <h4 class="mt-5 mb-8">Prix</h4>
                 <v-range-slider v-model="priceRange" class="ma-5" min="0" max="1000" step="10" thumb-label="always"></v-range-slider>
+
+                <div v-if="brands.length > 0">
+                    <h4 class="mt-5 mb-2">Marque</h4>
+                    <div class="size d-flex ga-1 flex-wrap">
+                        <p v-for="(brand, index) in brands" @click="toggleBrand(brand)" :class="{ active: selectedBrand === brand }" :key="index">{{ brand }}</p>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -49,9 +56,19 @@
     const items = [{ title: 'Meilleures ventes' }, { title: 'Prix croissant' }, { title: 'Prix décroissant' }, { title: 'Ordre Alphabétique' }];
     const selectedItem = ref(items[0]);
     const menuOpen = ref(false);
+    const brands = data.value ? [...new Set(data.value.map((product) => product.brand_name))] : [];
 
     const size = ref(null);
     const priceRange = ref([0, 1000]);
+    const selectedBrand = ref(null);
+
+    const toggleBrand = (brand) => {
+        selectedBrand.value = selectedBrand.value === brand ? null : brand;
+    };
+
+    const toggleSize = (value) => {
+        size.value = size.value === value ? null : value;
+    };
 
     const sortedProducts = computed(() => {
         if (!data.value) return [];
@@ -60,6 +77,11 @@
 
         // Filter by price range
         sorted = sorted.filter((product) => product.price >= priceRange.value[0] && product.price <= priceRange.value[1]);
+
+        // Filter by brand
+        if (selectedBrand.value) {
+            sorted = sorted.filter((product) => product.brand_name === selectedBrand.value);
+        }
 
         switch (selectedItem.value.title) {
             case 'Prix croissant':
