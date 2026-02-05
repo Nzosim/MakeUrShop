@@ -26,6 +26,6 @@
     nuxtApp.hook('page:finish', () => {
         setTimeout(() => {
             isLoading.value = false;
-        }, 300);
+        }, 10);
     });
 </script>

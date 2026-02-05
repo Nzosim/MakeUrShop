@@ -14,7 +14,6 @@
             <v-btn text to="/" ripple="false" class="pa-0">
                 <img src="/assets/img/small_logo_makeurshop.png" class="icons" height="40" alt="Logo" />
             </v-btn>
-            <v-btn to="/about" class="categories">Notre marque</v-btn>
         </div>
 
         <v-spacer />

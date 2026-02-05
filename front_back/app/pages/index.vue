@@ -1,6 +1,6 @@
 <template>
     <v-container>
-        <v-img src="/contents/index/visual_1_index.png" width="1000" elevation="8" class="mx-auto mt-8 rounded-xl"></v-img>
+        <v-img src="/contents/index/visual_index_1.png" width="1000" elevation="8" class="mx-auto mt-8 rounded-xl"></v-img>
     </v-container>
     <v-container>
         <h2 class="my-12">LES PLUS VENDUS ⤶</h2>
