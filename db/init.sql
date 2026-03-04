@@ -229,13 +229,59 @@ INSERT INTO brand (name) VALUES
 
 INSERT INTO product (category_id, brand_id, name, description, price, sale_price, type, actif)
 VALUES
--- Homme
+-- Homme - T-shirts (catégorie 4)
 (4, 1, 'T-shirt Homme Basic', 'T-shirt coton 100%', 19.99, 0, 'classique', TRUE),
-(5, 4, 'Jean Homme Slim', 'Jean slim bleu', 49.99, 0, 'classique', TRUE),
-(6, 2, 'Veste Homme Mi-saison', 'Veste légère', 89.99, 20, 'classique', TRUE),
 (4, 1, 'T-shirt Homme Basic V2', 'T-shirt coton 100%', 19.99, 0, 'classique', TRUE),
-(5, 4, 'Jean Homme Slim V2', 'Jean slim bleu', 49.99, 0, 'classique', TRUE),
-(6, 2, 'Veste Homme Mi-saison V2', 'Veste légère', 89.99, 0, 'classique', TRUE),
+(4, 2, 'T-shirt Homme Sport Adidas', 'T-shirt technique respirant', 29.99, 0, 'classique', TRUE),
+(4, 3, 'T-shirt Homme Puma Essential', 'T-shirt casual confortable', 24.99, 15, 'classique', TRUE),
+(4, 4, 'T-shirt Homme H&M Oversized', 'T-shirt oversize tendance', 14.99, 0, 'classique', TRUE),
+(4, 5, 'T-shirt Homme Zara Premium', 'T-shirt coton premium', 22.99, 0, 'classique', TRUE),
+(4, 6, 'T-shirt Homme Tommy Classic', 'T-shirt col rond classique', 39.99, 10, 'classique', TRUE),
+(4, 7, 'T-shirt Homme Calvin Klein Logo', 'T-shirt avec logo brodé', 34.99, 0, 'classique', TRUE),
+(4, 1, 'T-shirt Homme Nike Dri-FIT', 'T-shirt performance sport', 34.99, 0, 'classique', TRUE),
+(4, 2, 'T-shirt Homme Adidas Trefoil', 'T-shirt rétro logo trèfle', 27.99, 20, 'classique', TRUE),
+(4, 3, 'T-shirt Homme Puma Graphic', 'T-shirt imprimé graphique', 22.99, 0, 'classique', TRUE),
+(4, 4, 'T-shirt Homme H&M Slim Fit', 'T-shirt ajusté stretch', 12.99, 0, 'classique', TRUE),
+
+-- Homme - Pantalons (catégorie 5)
+(5, 4, 'Jean Homme Slim', 'Jean slim bleu', 49.99, 0, 'classique', TRUE),
+(5, 4, 'Jean Homme Slim V2', 'Jean slim bleu délavé', 49.99, 0, 'classique', TRUE),
+(5, 5, 'Pantalon Homme Chino Zara', 'Chino coupe droite beige', 39.99, 0, 'classique', TRUE),
+(5, 6, 'Jean Homme Tommy Regular', 'Jean regular fit indigo', 79.99, 15, 'classique', TRUE),
+(5, 7, 'Jean Homme Calvin Klein Straight', 'Jean droit noir', 89.99, 0, 'classique', TRUE),
+(5, 1, 'Jogger Homme Nike Tech', 'Pantalon jogger tech fleece', 59.99, 0, 'classique', TRUE),
+(5, 2, 'Pantalon Homme Adidas Training', 'Pantalon entraînement', 44.99, 25, 'classique', TRUE),
+(5, 3, 'Pantalon Homme Puma Cargo', 'Pantalon cargo streetwear', 54.99, 0, 'classique', TRUE),
+(5, 4, 'Pantalon Homme H&M Lin', 'Pantalon en lin léger', 34.99, 0, 'classique', TRUE),
+(5, 5, 'Jean Homme Zara Skinny', 'Jean skinny stretch noir', 45.99, 10, 'classique', TRUE),
+(5, 6, 'Pantalon Homme Tommy Chino', 'Chino Tommy coupe slim', 69.99, 0, 'classique', TRUE),
+(5, 7, 'Jean Homme CK Slim Taper', 'Jean slim tapered gris', 94.99, 0, 'classique', TRUE),
+
+-- Homme - Vestes (catégorie 6)
+(6, 2, 'Veste Homme Mi-saison', 'Veste légère', 89.99, 20, 'classique', TRUE),
+(6, 2, 'Veste Homme Mi-saison V2', 'Veste légère imperméable', 89.99, 0, 'classique', TRUE),
+(6, 1, 'Veste Homme Nike Windrunner', 'Coupe-vent classique', 99.99, 0, 'classique', TRUE),
+(6, 3, 'Veste Homme Puma Bomber', 'Bomber jacket streetwear', 79.99, 10, 'classique', TRUE),
+(6, 4, 'Veste Homme H&M Denim', 'Veste en jean classique', 49.99, 0, 'classique', TRUE),
+(6, 5, 'Veste Homme Zara Blazer', 'Blazer casual marine', 89.99, 0, 'classique', TRUE),
+(6, 6, 'Veste Homme Tommy Padded', 'Doudoune légère', 149.99, 30, 'classique', TRUE),
+(6, 7, 'Veste Homme CK Leather', 'Veste cuir synthétique', 129.99, 0, 'classique', TRUE),
+(6, 1, 'Veste Homme Nike Down Fill', 'Doudoune chaude hiver', 159.99, 0, 'classique', TRUE),
+(6, 2, 'Veste Homme Adidas Track', 'Veste de survêtement rétro', 69.99, 15, 'classique', TRUE),
+(6, 5, 'Veste Homme Zara Parka', 'Parka longue kaki', 119.99, 0, 'classique', TRUE),
+(6, 4, 'Veste Homme H&M Matelassée', 'Veste matelassée noire', 59.99, 0, 'classique', TRUE),
+
+-- Homme - Chaussures (catégorie 7)
+(7, 1, 'Nike Air Max 90 Homme', 'Sneakers iconiques', 139.99, 0, 'classique', TRUE),
+(7, 2, 'Adidas Stan Smith Homme', 'Baskets cuir blanc', 99.99, 0, 'classique', TRUE),
+(7, 3, 'Puma Suede Classic Homme', 'Baskets daim rétro', 79.99, 20, 'classique', TRUE),
+(7, 1, 'Nike Air Force 1 Homme', 'Sneakers blanches classiques', 109.99, 0, 'classique', TRUE),
+(7, 2, 'Adidas Ultraboost Homme', 'Running haute performance', 179.99, 15, 'classique', TRUE),
+(7, 3, 'Puma RS-X Homme', 'Sneakers chunky colorées', 109.99, 0, 'classique', TRUE),
+(7, 1, 'Nike Dunk Low Homme', 'Sneakers streetwear', 119.99, 0, 'classique', TRUE),
+(7, 2, 'Adidas Gazelle Homme', 'Baskets rétro suède', 89.99, 10, 'classique', TRUE),
+(7, 5, 'Zara Boots Homme Chelsea', 'Boots chelsea cuir', 69.99, 0, 'classique', TRUE),
+(7, 6, 'Tommy Hilfiger Sneakers Homme', 'Sneakers casual cuir', 99.99, 0, 'classique', TRUE),
 
 -- Femme
 (8, 5, 'Robe Femme Été', 'Robe fluide', 59.99, 0, 'classique', TRUE),
@@ -251,37 +297,128 @@ VALUES
 
 INSERT INTO stock (product_id, size, stock_number)
 VALUES
-(1, 'S', 30),
-(1, 'M', 50),
-(1, 'L', 40),
-(2, 'M', 30),
-(2, 'L', 25),
-(2, 'XL', 20),
-(3, 'L', 15),
-(3, 'XL', 10),
-(4, 'M', 20),
-(5, 'L', 40),
-(7, 'S', 60),
-(8, 'M', 25),
-(9, 'L', 8);
+-- T-shirts Homme
+(1, 'S', 30), (1, 'M', 50), (1, 'L', 40),
+(2, 'S', 25), (2, 'M', 35), (2, 'L', 30),
+(3, 'M', 40), (3, 'L', 30), (3, 'XL', 20),
+(4, 'S', 15), (4, 'M', 25), (4, 'L', 20),
+(5, 'S', 50), (5, 'M', 60), (5, 'L', 45), (5, 'XL', 30),
+(6, 'S', 20), (6, 'M', 30), (6, 'L', 25),
+(7, 'M', 15), (7, 'L', 20), (7, 'XL', 10),
+(8, 'S', 25), (8, 'M', 35),
+(9, 'M', 40), (9, 'L', 30),
+(10, 'S', 20), (10, 'M', 15), (10, 'L', 25),
+(11, 'M', 30), (11, 'L', 20),
+(12, 'S', 45), (12, 'M', 55), (12, 'L', 35),
+-- Pantalons Homme
+(13, 'M', 30), (13, 'L', 25), (13, 'XL', 20),
+(14, 'M', 20), (14, 'L', 40),
+(15, 'S', 15), (15, 'M', 25), (15, 'L', 30),
+(16, 'M', 20), (16, 'L', 15), (16, 'XL', 10),
+(17, 'M', 12), (17, 'L', 18),
+(18, 'S', 30), (18, 'M', 40), (18, 'L', 25),
+(19, 'M', 35), (19, 'L', 28), (19, 'XL', 15),
+(20, 'M', 20), (20, 'L', 15),
+(21, 'S', 10), (21, 'M', 20), (21, 'L', 30),
+(22, 'M', 25), (22, 'L', 20),
+(23, 'M', 15), (23, 'L', 10), (23, 'XL', 8),
+(24, 'M', 12), (24, 'L', 10),
+-- Vestes Homme
+(25, 'L', 15), (25, 'XL', 10),
+(26, 'M', 20), (26, 'L', 15),
+(27, 'M', 18), (27, 'L', 22), (27, 'XL', 12),
+(28, 'S', 10), (28, 'M', 15), (28, 'L', 12),
+(29, 'M', 30), (29, 'L', 25), (29, 'XL', 15),
+(30, 'M', 20), (30, 'L', 18),
+(31, 'M', 8), (31, 'L', 12), (31, 'XL', 6),
+(32, 'M', 10), (32, 'L', 8),
+(33, 'M', 15), (33, 'L', 20), (33, 'XL', 10),
+(34, 'M', 22), (34, 'L', 18),
+(35, 'M', 12), (35, 'L', 15),
+(36, 'M', 25), (36, 'L', 20),
+-- Chaussures Homme
+(37, 'M', 20), (37, 'L', 15),
+(38, 'M', 30), (38, 'L', 25),
+(39, 'M', 18), (39, 'L', 12),
+(40, 'M', 25), (40, 'L', 20),
+(41, 'M', 10), (41, 'L', 8),
+(42, 'M', 15), (42, 'L', 12),
+(43, 'M', 22), (43, 'L', 18),
+(44, 'M', 28), (44, 'L', 20),
+(45, 'M', 15), (45, 'L', 10),
+(46, 'M', 20), (46, 'L', 15),
+-- Femme
+(47, 'S', 60), (47, 'M', 40),
+(48, 'M', 25), (48, 'L', 15),
+(49, 'L', 8),
+-- Enfant
+(50, 'S', 30), (50, 'M', 25),
+(51, 'M', 20), (51, 'L', 15),
+(52, 'M', 10), (52, 'L', 8);
 
 
 
 
 INSERT INTO image (product_id, url)
 VALUES
+-- T-shirts Homme
 (1, 'https://www.lapolemik.com/4295/t-shirt-homme-basic-citadel-blue.jpg'),
-(2, 'https://www.vibs.com/on/demandware.static/-/Sites-Bonobo_master/default/dw0ca89ecb/jeans-slim-ultra-stretch-denim-stone-homme-vue1-36125211151230242.jpg'),
-(3, 'https://www.gardedenfantspourtous.fr/wp-content/uploads/2022/06/veste-homme-mi-saison-686vso-1.jpg'),
-(4, 'https://www.lapolemik.com/4295/t-shirt-homme-basic-citadel-blue.jpg'),
-(5, 'https://www.vibs.com/on/demandware.static/-/Sites-Bonobo_master/default/dw0ca89ecb/jeans-slim-ultra-stretch-denim-stone-homme-vue1-36125211151230242.jpg'),
-(6, 'https://www.gardedenfantspourtous.fr/wp-content/uploads/2022/06/veste-homme-mi-saison-686vso-1.jpg'),
-(7, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRP8oaSDIicR1Enfndo9l2bc9laui4PIXNfYw&s'),
-(8, 'https://images.etam.com/on/demandware.static/-/Sites-ELIN-master/default/dwb225c2c6/654542301_a.jpg?sw=1000&sh=1510'),
-(9, 'https://medias.afibel.com/fr/media/6/5/jupe-longue-metallisee-plissee--65581_SF1_S-20240911104706.jpg?twic=v1/quality=85/cover=500x667'),
-(10, 'https://m.media-amazon.com/images/I/6193-P7FPJL._AC_UY350_.jpg'),
-(11, 'https://m.media-amazon.com/images/I/61HVV5nJWvL._AC_UY1000_.jpg'),
-(12, 'https://www.lespetitsbaroudeurs.com/37852-large_default/veste-serkkula-reima.jpg');
+(2, 'https://www.lapolemik.com/4295/t-shirt-homme-basic-citadel-blue.jpg'),
+(3, 'https://assets.adidas.com/images/w_600,f_auto,q_auto/a1a4f5c5d02f4b6e8e1daf0000a0e8b0_9366/T-shirt_Essentials_Blanc_GL0058_01_laydown.jpg'),
+(4, 'https://images.puma.com/image/upload/f_auto,q_auto,b_rgb:fafafa,w_600,h_600/global/586668/56/mod01/fnd/EEA/fmt/png'),
+(5, 'https://www.lapolemik.com/4295/t-shirt-homme-basic-citadel-blue.jpg'),
+(6, 'https://www.lapolemik.com/4295/t-shirt-homme-basic-citadel-blue.jpg'),
+(7, 'https://www.lapolemik.com/4295/t-shirt-homme-basic-citadel-blue.jpg'),
+(8, 'https://www.lapolemik.com/4295/t-shirt-homme-basic-citadel-blue.jpg'),
+(9, 'https://www.lapolemik.com/4295/t-shirt-homme-basic-citadel-blue.jpg'),
+(10, 'https://www.lapolemik.com/4295/t-shirt-homme-basic-citadel-blue.jpg'),
+(11, 'https://www.lapolemik.com/4295/t-shirt-homme-basic-citadel-blue.jpg'),
+(12, 'https://www.lapolemik.com/4295/t-shirt-homme-basic-citadel-blue.jpg'),
+-- Pantalons Homme
+(13, 'https://www.vibs.com/on/demandware.static/-/Sites-Bonobo_master/default/dw0ca89ecb/jeans-slim-ultra-stretch-denim-stone-homme-vue1-36125211151230242.jpg'),
+(14, 'https://www.vibs.com/on/demandware.static/-/Sites-Bonobo_master/default/dw0ca89ecb/jeans-slim-ultra-stretch-denim-stone-homme-vue1-36125211151230242.jpg'),
+(15, 'https://www.vibs.com/on/demandware.static/-/Sites-Bonobo_master/default/dw0ca89ecb/jeans-slim-ultra-stretch-denim-stone-homme-vue1-36125211151230242.jpg'),
+(16, 'https://www.vibs.com/on/demandware.static/-/Sites-Bonobo_master/default/dw0ca89ecb/jeans-slim-ultra-stretch-denim-stone-homme-vue1-36125211151230242.jpg'),
+(17, 'https://www.vibs.com/on/demandware.static/-/Sites-Bonobo_master/default/dw0ca89ecb/jeans-slim-ultra-stretch-denim-stone-homme-vue1-36125211151230242.jpg'),
+(18, 'https://www.vibs.com/on/demandware.static/-/Sites-Bonobo_master/default/dw0ca89ecb/jeans-slim-ultra-stretch-denim-stone-homme-vue1-36125211151230242.jpg'),
+(19, 'https://www.vibs.com/on/demandware.static/-/Sites-Bonobo_master/default/dw0ca89ecb/jeans-slim-ultra-stretch-denim-stone-homme-vue1-36125211151230242.jpg'),
+(20, 'https://www.vibs.com/on/demandware.static/-/Sites-Bonobo_master/default/dw0ca89ecb/jeans-slim-ultra-stretch-denim-stone-homme-vue1-36125211151230242.jpg'),
+(21, 'https://www.vibs.com/on/demandware.static/-/Sites-Bonobo_master/default/dw0ca89ecb/jeans-slim-ultra-stretch-denim-stone-homme-vue1-36125211151230242.jpg'),
+(22, 'https://www.vibs.com/on/demandware.static/-/Sites-Bonobo_master/default/dw0ca89ecb/jeans-slim-ultra-stretch-denim-stone-homme-vue1-36125211151230242.jpg'),
+(23, 'https://www.vibs.com/on/demandware.static/-/Sites-Bonobo_master/default/dw0ca89ecb/jeans-slim-ultra-stretch-denim-stone-homme-vue1-36125211151230242.jpg'),
+(24, 'https://www.vibs.com/on/demandware.static/-/Sites-Bonobo_master/default/dw0ca89ecb/jeans-slim-ultra-stretch-denim-stone-homme-vue1-36125211151230242.jpg'),
+-- Vestes Homme
+(25, 'https://www.gardedenfantspourtous.fr/wp-content/uploads/2022/06/veste-homme-mi-saison-686vso-1.jpg'),
+(26, 'https://www.gardedenfantspourtous.fr/wp-content/uploads/2022/06/veste-homme-mi-saison-686vso-1.jpg'),
+(27, 'https://www.gardedenfantspourtous.fr/wp-content/uploads/2022/06/veste-homme-mi-saison-686vso-1.jpg'),
+(28, 'https://www.gardedenfantspourtous.fr/wp-content/uploads/2022/06/veste-homme-mi-saison-686vso-1.jpg'),
+(29, 'https://www.gardedenfantspourtous.fr/wp-content/uploads/2022/06/veste-homme-mi-saison-686vso-1.jpg'),
+(30, 'https://www.gardedenfantspourtous.fr/wp-content/uploads/2022/06/veste-homme-mi-saison-686vso-1.jpg'),
+(31, 'https://www.gardedenfantspourtous.fr/wp-content/uploads/2022/06/veste-homme-mi-saison-686vso-1.jpg'),
+(32, 'https://www.gardedenfantspourtous.fr/wp-content/uploads/2022/06/veste-homme-mi-saison-686vso-1.jpg'),
+(33, 'https://www.gardedenfantspourtous.fr/wp-content/uploads/2022/06/veste-homme-mi-saison-686vso-1.jpg'),
+(34, 'https://www.gardedenfantspourtous.fr/wp-content/uploads/2022/06/veste-homme-mi-saison-686vso-1.jpg'),
+(35, 'https://www.gardedenfantspourtous.fr/wp-content/uploads/2022/06/veste-homme-mi-saison-686vso-1.jpg'),
+(36, 'https://www.gardedenfantspourtous.fr/wp-content/uploads/2022/06/veste-homme-mi-saison-686vso-1.jpg'),
+-- Chaussures Homme
+(37, 'https://static.nike.com/a/images/t_PDP_936_v1/f_auto,q_auto:eco/b7d9211c-26e7-431a-ac24-b0540fb3c00f/AIR+MAX+90.png'),
+(38, 'https://static.nike.com/a/images/t_PDP_936_v1/f_auto,q_auto:eco/b7d9211c-26e7-431a-ac24-b0540fb3c00f/AIR+MAX+90.png'),
+(39, 'https://static.nike.com/a/images/t_PDP_936_v1/f_auto,q_auto:eco/b7d9211c-26e7-431a-ac24-b0540fb3c00f/AIR+MAX+90.png'),
+(40, 'https://static.nike.com/a/images/t_PDP_936_v1/f_auto,q_auto:eco/b7d9211c-26e7-431a-ac24-b0540fb3c00f/AIR+MAX+90.png'),
+(41, 'https://static.nike.com/a/images/t_PDP_936_v1/f_auto,q_auto:eco/b7d9211c-26e7-431a-ac24-b0540fb3c00f/AIR+MAX+90.png'),
+(42, 'https://static.nike.com/a/images/t_PDP_936_v1/f_auto,q_auto:eco/b7d9211c-26e7-431a-ac24-b0540fb3c00f/AIR+MAX+90.png'),
+(43, 'https://static.nike.com/a/images/t_PDP_936_v1/f_auto,q_auto:eco/b7d9211c-26e7-431a-ac24-b0540fb3c00f/AIR+MAX+90.png'),
+(44, 'https://static.nike.com/a/images/t_PDP_936_v1/f_auto,q_auto:eco/b7d9211c-26e7-431a-ac24-b0540fb3c00f/AIR+MAX+90.png'),
+(45, 'https://static.nike.com/a/images/t_PDP_936_v1/f_auto,q_auto:eco/b7d9211c-26e7-431a-ac24-b0540fb3c00f/AIR+MAX+90.png'),
+(46, 'https://static.nike.com/a/images/t_PDP_936_v1/f_auto,q_auto:eco/b7d9211c-26e7-431a-ac24-b0540fb3c00f/AIR+MAX+90.png'),
+-- Femme
+(47, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRP8oaSDIicR1Enfndo9l2bc9laui4PIXNfYw&s'),
+(48, 'https://images.etam.com/on/demandware.static/-/Sites-ELIN-master/default/dwb225c2c6/654542301_a.jpg?sw=1000&sh=1510'),
+(49, 'https://medias.afibel.com/fr/media/6/5/jupe-longue-metallisee-plissee--65581_SF1_S-20240911104706.jpg?twic=v1/quality=85/cover=500x667'),
+-- Enfant
+(50, 'https://m.media-amazon.com/images/I/6193-P7FPJL._AC_UY350_.jpg'),
+(51, 'https://m.media-amazon.com/images/I/61HVV5nJWvL._AC_UY1000_.jpg'),
+(52, 'https://www.lespetitsbaroudeurs.com/37852-large_default/veste-serkkula-reima.jpg');
 
 
 
@@ -295,8 +432,8 @@ VALUES
 INSERT INTO order_list (order_id, product_id, quantity, unit_price)
 VALUES
 (1, 1, 2, 19.99),
-(2, 4, 1, 59.99),
-(3, 7, 2, 14.99);
+(2, 47, 1, 59.99),
+(3, 50, 2, 14.99);
 
 
 
