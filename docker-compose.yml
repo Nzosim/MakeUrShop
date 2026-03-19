@@ -11,6 +11,8 @@ services:
         environment:
             - NODE_ENV=development
             - DB_HOST=db
+            - CHOKIDAR_USEPOLLING=true
+            - WATCHPACK_POLLING=true
             - DB_USER=root
             - DB_PASSWORD=root
             - DB_NAME=makeurshop
