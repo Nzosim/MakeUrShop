@@ -4,7 +4,16 @@ export default defineEventHandler(async (event) => {
     const db = getDB();
 
     const query = getQuery(event);
-    const categoryId = Number(query.id);
+    const categoryId = query.id ? Number(query.id) : null;
+    const productId = query.productId ? Number(query.productId) : null;
+
+    let whereClause = '';
+
+    if (productId) {
+        whereClause = `WHERE p.id = ${productId}`;
+    } else if (categoryId !== null) {
+        whereClause = `WHERE c.category_parent_id = ${categoryId} OR c.id = ${categoryId}`;
+    }
 
     const request = `
         SELECT
@@ -26,7 +35,7 @@ export default defineEventHandler(async (event) => {
         LEFT JOIN image i ON i.product_id = p.id
         LEFT JOIN stock s ON s.product_id = p.id
 
-        WHERE c.category_parent_id = ${categoryId} OR c.id = ${categoryId}
+        ${whereClause}
 
         GROUP BY p.id, p.name, p.description, p.price, p.actif, b.name
     `;
