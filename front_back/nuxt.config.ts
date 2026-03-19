@@ -16,7 +16,7 @@ export default defineNuxtConfig({
                     light: {
                         colors: {
                             background: '#E7E7E7',
-                            surface: '#E7E7E7',
+                            surface: '#f7f7f7',
                             primary: '#A160A1',
                             secondary: '#4C4D5F',
                             accent: '#291928',

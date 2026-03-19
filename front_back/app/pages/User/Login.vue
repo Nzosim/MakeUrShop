@@ -46,8 +46,6 @@
             user.value = res.user;
 
             localStorage.setItem('user', JSON.stringify(res.user));
-
-            alert('Connexion réussie');
             navigateTo('/User/Profile');
         } else {
             alert('Identifiants incorrects');

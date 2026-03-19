@@ -8,7 +8,8 @@
             "storeName": "MakeUrShop",
             "storeEmail": "info@makeurshop.fr",
             "storePhone": "+33612345678",
-            "storeAddress": "8 rue Jean Lamour, 54500 Vandoeuvre-lès-Nancy, France",
+            "storeAddress": "2 rue Jean Lamour, 54500 Vandoeuvre-lès-Nancy, France",
+            "storeAddressName": "Polytech Nancy",
             "storeSiret": "123 456 789 00012"
         }
     }
