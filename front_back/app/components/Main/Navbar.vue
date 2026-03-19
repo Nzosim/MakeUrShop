@@ -1,17 +1,37 @@
 <template>
-    <v-toolbar :elevation="8" class="px-4">
+    <v-navigation-drawer v-model="drawer" temporary color="surface">
+        <v-list>
+            <v-list-item v-for="category in categories" :key="category.id" :to="`/Product/${category.id}`" @click="drawer = false">
+                <v-list-item-title>{{ category.name }}</v-list-item-title>
+            </v-list-item>
+        </v-list>
+    </v-navigation-drawer>
+
+    <v-app-bar :elevation="8" color="surface" class="px-4">
         <div class="d-flex align-center nav-side-block">
-            <v-btn text to="/" ripple="false" variant="plain" class="pa-0">
+            <v-app-bar-nav-icon class="d-md-none mr-2" @click="drawer = !drawer" />
+
+            <v-btn text to="/" ripple="false" class="pa-0">
                 <img src="/assets/img/small_logo_makeurshop.png" class="icons" height="40" alt="Logo" />
             </v-btn>
         </div>
 
         <v-spacer />
 
-        <div class="nav-center-categories">
-            <v-btn v-for="(name, index) in configData.config.navBar.names" :key="index" text :to="`/Product/${index + 1}`" class="categories" ripple="false">
-                {{ name }}
-            </v-btn>
+        <div class="nav-center-categories d-none d-md-flex">
+            <v-menu v-for="category in categories" :key="category.id" open-on-hover offset-y>
+                <template #activator="{ props }">
+                    <v-btn text class="categories" ripple="false" :to="`/Product/${category.id}`" v-bind="props">
+                        {{ category.name }}
+                    </v-btn>
+                </template>
+
+                <v-list v-if="category.children && category.children.length">
+                    <v-list-item v-for="sub in category.children" :key="sub.id" :to="`/Product/${sub.id}`">
+                        <v-list-item-title>{{ sub.name }}</v-list-item-title>
+                    </v-list-item>
+                </v-list>
+            </v-menu>
         </div>
 
         <v-spacer />
@@ -23,23 +43,24 @@
                 </v-icon>
             </v-btn>
 
-            <v-btn icon to="/Cart" variant="text">
+            <v-btn icon to="/Cart/Cart" variant="text">
                 <v-icon size="22">mdi-cart-outline</v-icon>
             </v-btn>
 
-            <v-btn icon to="/User/User" variant="text">
+            <v-btn icon to="/User/Profile" variant="text">
                 <v-icon size="22">mdi-account-outline</v-icon>
             </v-btn>
         </div>
-    </v-toolbar>
+    </v-app-bar>
 </template>
 
 <script setup>
     import { useTheme } from 'vuetify';
-    const theme = useTheme();
-    import configData from '/assets/config.json';
     import { ref } from 'vue';
+    import configData from '/assets/config.json';
 
-    const showSearch = ref(false);
-    const searchQuery = ref('');
+    const theme = useTheme();
+    const drawer = ref(false);
+
+    const { data: categories } = await useFetch('/api/navbar/getCategories');
 </script>

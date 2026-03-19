@@ -23,19 +23,49 @@
                 </div>
                 <h4 class="mt-5 mb-2">Taille</h4>
                 <div class="size d-flex ga-1">
-                    <p @click="size = 'S'" :class="{ active: size === 'S' }">S</p>
-                    <p @click="size = 'M'" :class="{ active: size === 'M' }">M</p>
-                    <p @click="size = 'L'" :class="{ active: size === 'L' }">L</p>
-                    <p @click="size = 'XL'" :class="{ active: size === 'XL' }">XL</p>
+                    <p @click="toggleSize('S')" :class="{ active: size === 'S' }">S</p>
+                    <p @click="toggleSize('M')" :class="{ active: size === 'M' }">M</p>
+                    <p @click="toggleSize('L')" :class="{ active: size === 'L' }">L</p>
+                    <p @click="toggleSize('XL')" :class="{ active: size === 'XL' }">XL</p>
                 </div>
 
                 <h4 class="mt-5 mb-8">Prix</h4>
                 <v-range-slider v-model="priceRange" class="ma-5" min="0" max="1000" step="10" thumb-label="always"></v-range-slider>
+
+                <div v-if="brands.length > 0">
+                    <h4 class="mt-5 mb-2">Marque</h4>
+                    <div class="size d-flex ga-1 flex-wrap">
+                        <p v-for="(brand, index) in brands" @click="toggleBrand(brand)" :class="{ active: selectedBrand === brand }" :key="index">{{ brand }}</p>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="products-section justify-center">
-            <product-list v-model:products="sortedProducts" />
+        <div class="products-section-main">
+            <div class="products-section justify-center">
+                <product-list v-model:products="paginatedProducts" />
+            </div>
+
+            <div v-if="totalPages > 1" class="pagination d-flex justify-center align-center ga-2 my-8">
+                <v-btn icon size="small" variant="text" :disabled="currentPage === 1" @click="goToPage(currentPage - 1)">
+                    <v-icon>mdi-chevron-left</v-icon>
+                </v-btn>
+
+                <div v-for="page in displayedPages" :key="page">
+                    <span v-if="page === '...'" class="pagination-content">...</span>
+                    <v-btn v-else size="small" :variant="page === currentPage ? 'flat' : 'outlined'" :color="page === currentPage ? 'primary' : undefined" @click="goToPage(page)">
+                        {{ page }}
+                    </v-btn>
+                </div>
+
+                <v-btn icon size="small" variant="text" :disabled="currentPage === totalPages" @click="goToPage(currentPage + 1)">
+                    <v-icon>mdi-chevron-right</v-icon>
+                </v-btn>
+            </div>
+
+            <p v-if="sortedProducts.length > 0" class="text-center text-grey mb-4">
+                {{ (currentPage - 1) * itemsPerPage + 1 }}-{{ Math.min(currentPage * itemsPerPage, sortedProducts.length) }} sur {{ sortedProducts.length }} produits
+            </p>
         </div>
     </div>
 </template>
@@ -49,17 +79,49 @@
     const items = [{ title: 'Meilleures ventes' }, { title: 'Prix croissant' }, { title: 'Prix décroissant' }, { title: 'Ordre Alphabétique' }];
     const selectedItem = ref(items[0]);
     const menuOpen = ref(false);
+    const brands = data.value ? [...new Set(data.value.map((product) => product.brand_name))] : [];
 
     const size = ref(null);
     const priceRange = ref([0, 1000]);
+    const selectedBrand = ref(null);
+
+    // Pagination
+    const currentPage = ref(1);
+    const itemsPerPage = 12;
+
+    const toggleBrand = (brand) => {
+        selectedBrand.value = selectedBrand.value === brand ? null : brand;
+        currentPage.value = 1;
+    };
+
+    const toggleSize = (value) => {
+        size.value = size.value === value ? null : value;
+        currentPage.value = 1;
+    };
+
+    // Reset page quand on change un filtre
+    watch([selectedItem, priceRange, selectedBrand, size], () => {
+        currentPage.value = 1;
+    });
 
     const sortedProducts = computed(() => {
         if (!data.value) return [];
 
         let sorted = [...data.value];
 
-        // Filter by price range
+        // Filtre par prix
         sorted = sorted.filter((product) => product.price >= priceRange.value[0] && product.price <= priceRange.value[1]);
+
+        // Filtre par marque
+        if (selectedBrand.value) {
+            sorted = sorted.filter((product) => product.brand_name === selectedBrand.value);
+        }
+
+        // Filtre par taille
+        if (size.value) {
+            const stockKey = `taille_${size.value}`;
+            sorted = sorted.filter((product) => (product?.[stockKey] ?? 0) > 0);
+        }
 
         switch (selectedItem.value.title) {
             case 'Prix croissant':
@@ -73,4 +135,39 @@
                 return sorted;
         }
     });
+
+    const totalPages = computed(() => Math.ceil(sortedProducts.value.length / itemsPerPage));
+
+    const paginatedProducts = computed(() => {
+        const start = (currentPage.value - 1) * itemsPerPage; // Index de départ de la page
+        return sortedProducts.value.slice(start, start + itemsPerPage);
+    });
+
+    const displayedPages = computed(() => {
+        const total = totalPages.value;
+        const current = currentPage.value;
+        const pages = [];
+
+        // Si plus de 7 pages on les affiches pas toutes
+        if (total <= 7) {
+            for (let i = 1; i <= total; i++) pages.push(i);
+        } else {
+            pages.push(1);
+            if (current > 3) pages.push('...');
+            for (let i = Math.max(2, current - 1); i <= Math.min(total - 1, current + 1); i++) {
+                pages.push(i);
+            }
+            if (current < total - 2) pages.push('...');
+            pages.push(total);
+        }
+        return pages;
+    });
+
+    // Changement de page
+    const goToPage = (page) => {
+        if (page >= 1 && page <= totalPages.value) {
+            currentPage.value = page;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    };
 </script>

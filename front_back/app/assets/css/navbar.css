@@ -10,10 +10,6 @@
     --v-activated-opacity: 0 !important;
 }
 
-.v-btn:hover .v-btn__overlay {
-    --v-hover-opacity: 0 !important;
-}
-
 .categories {
     font-family: 'Inter', sans-serif !important;
     font-weight: 600 !important;
@@ -34,4 +30,11 @@
 .nav-side-block {
     flex: 1;
     z-index: 1;
+}
+
+.navbar-link {
+    color: rgb(var(--v-theme-accent)) !important;
+    text-decoration: none;
+    font-weight: 400;
+    transition: opacity 0.3s ease;
 }
