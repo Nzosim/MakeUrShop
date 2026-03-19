@@ -14,7 +14,6 @@
         <div class="flex-1-0-100 text-center mt-2">
             {{ new Date().getFullYear() }} — ©
             <strong>{{ storeName }}</strong>
-            — {{ storeEmail }}
         </div>
     </v-footer>
 </template>
@@ -23,11 +22,10 @@
     const storeName = configData.config.info.storeName;
     const storeEmail = configData.config.info.storeEmail;
     const footerLinks = [
-        { title: 'CGV', url: '/cgv' },
-        { title: 'MENTIONS LÉGALES', url: '/legal-mentions' },
-        { title: 'POLITIQUE DE CONFIDENTIALITÉ', url: '/privacy-policy' },
-        { title: 'FAQ', url: '/faq' },
-        { title: 'NOUS CONTACTER', url: `mailto:${storeEmail}` },
-        { title: 'A PROPOS', url: `/About` },
+        { title: 'CGV', url: '/Cgv' },
+        { title: 'MENTIONS LÉGALES', url: '/Legal-mentions' },
+        { title: 'POLITIQUE DE CONFIDENTIALITÉ', url: '/Privacy-policy' },
+        { title: 'NOUS CONTACTER', url: '/Contact' },
+        { title: 'A PROPOS', url: '/About' },
     ];
 </script>
