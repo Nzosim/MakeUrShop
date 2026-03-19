@@ -2,19 +2,22 @@
     <v-container>
         <h1 class="my-12">MON COMPTE</h1>
 
-        <v-row>
+        <v-row v-if="user">
             <v-col cols="12" md="3">
                 <v-list class="bg-transparent">
                     <v-list-item prepend-icon="mdi-account-circle" title="Informations du compte" class="text mb-2 text-wrap" rounded="lg" active-color="text" active></v-list-item>
-                    <v-list-item prepend-icon="mdi-history" class="text" rounded="lg" active-color="text">
+
+                    <v-list-item prepend-icon="mdi-history" class="text mb-2" rounded="lg" active-color="text">
                         <v-list-item-title style="white-space: normal; line-height: 1.2">Historique de commandes</v-list-item-title>
                     </v-list-item>
+
+                    <v-list-item prepend-icon="mdi-logout" title="Se déconnecter" class="text text-error mt-4" rounded="lg" @click="logout"></v-list-item>
                 </v-list>
             </v-col>
 
             <v-col cols="12" md="9">
                 <v-card class="pa-6 border-accent" rounded="lg">
-                    <div v-for="user in users" :key="user.id">
+                    <div>
                         <h2 class="text-h5 mb-6 text-accent font-weight-bold">Bonjour {{ user.firstname }}</h2>
 
                         <v-row dense>
@@ -45,9 +48,38 @@
                 </v-card>
             </v-col>
         </v-row>
+
+        <v-row v-else justify="center">
+            <v-progress-circular indeterminate></v-progress-circular>
+        </v-row>
     </v-container>
 </template>
 
 <script setup>
-    const { data: users } = await useFetch('/api/user/getUser?id=2');
+    const user = useState('user');
+
+    onMounted(() => {
+        // Si pas de user en mémoire vive, on check le localStorage
+        if (!user.value) {
+            const savedUser = localStorage.getItem('user');
+            if (savedUser) {
+                user.value = JSON.parse(savedUser);
+            } else {
+                // Si vraiment rien, redirection
+                navigateTo('/User/Login');
+            }
+        }
+    });
+
+    const logout = () => {
+        user.value = null; // Vide l'état réactif
+        localStorage.removeItem('user'); // Nettoie le navigateur
+        navigateTo('/User/Login'); // Redirige
+    };
 </script>
+
+<style scoped>
+    .text-error {
+        color: #d32f2f !important;
+    }
+</style>

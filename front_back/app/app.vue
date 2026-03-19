@@ -28,4 +28,13 @@
             isLoading.value = false;
         }, 10);
     });
+
+    const user = useState('user', () => null);
+
+    onMounted(() => {
+        const savedUser = localStorage.getItem('user');
+        if (savedUser) {
+            user.value = JSON.parse(savedUser);
+        }
+    });
 </script>

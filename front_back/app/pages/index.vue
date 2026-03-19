@@ -1,6 +1,9 @@
 <template>
     <v-container>
-        <v-img src="/contents/index/visual_index_1.png" width="1000" elevation="8" class="mx-auto mt-8 rounded-xl"></v-img>
+        <v-carousel show-arrows="hover">
+            <v-carousel-item src="/contents/index/visual_index_1.png" cover></v-carousel-item>
+            <v-carousel-item src="/contents/index/visual_index_2.png" cover></v-carousel-item>
+        </v-carousel>
     </v-container>
     <v-container>
         <h2 class="my-12">LES PLUS VENDUS ⤶</h2>
