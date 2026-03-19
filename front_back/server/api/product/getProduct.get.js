@@ -4,7 +4,7 @@ export default defineEventHandler(async (event) => {
     const db = getDB();
 
     const query = getQuery(event);
-    const categoryId = query.id;
+    const categoryId = Number(query.id);
 
     const request = `
         SELECT
@@ -26,7 +26,7 @@ export default defineEventHandler(async (event) => {
         LEFT JOIN image i ON i.product_id = p.id
         LEFT JOIN stock s ON s.product_id = p.id
 
-        WHERE c.category_parent_id = ${categoryId}
+        WHERE c.category_parent_id = ${categoryId} OR c.id = ${categoryId}
 
         GROUP BY p.id, p.name, p.description, p.price, p.actif, b.name
     `;

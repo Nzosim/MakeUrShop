@@ -19,9 +19,19 @@
         <v-spacer />
 
         <div class="nav-center-categories d-none d-md-flex">
-            <v-btn v-for="category in categories" :key="category.id" text :to="`/Product/${category.id}`" class="categories" ripple="false">
-                {{ category.name }}
-            </v-btn>
+            <v-menu v-for="category in categories" :key="category.id" open-on-hover offset-y>
+                <template #activator="{ props }">
+                    <v-btn text class="categories" ripple="false" :to="`/Product/${category.id}`" v-bind="props">
+                        {{ category.name }}
+                    </v-btn>
+                </template>
+
+                <v-list v-if="category.children && category.children.length">
+                    <v-list-item v-for="sub in category.children" :key="sub.id" :to="`/Product/${sub.id}`">
+                        <v-list-item-title>{{ sub.name }}</v-list-item-title>
+                    </v-list-item>
+                </v-list>
+            </v-menu>
         </div>
 
         <v-spacer />

@@ -1,7 +1,7 @@
 <template>
-    <div v-for="product in products" :key="product.id" class="mt-5">
+    <NuxtLink v-for="product in products" :key="product.id" class="mt-5" :to="`/Product/${route.params.id}/${product.id}`" style="text-decoration: none; color: inherit">
         <display-one-product :product="product" />
-    </div>
+    </NuxtLink>
 </template>
 
 <script setup>
@@ -12,4 +12,6 @@
     });
 
     const emit = defineEmits(['update:products']);
+
+    const route = useRoute();
 </script>
