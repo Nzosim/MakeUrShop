@@ -1,5 +1,7 @@
 <template>
-    <div class="pa-8 d-flex justify-center" v-if="product">
+    <div class="pa-8 d-flex justify-center product-detail-wrapper" v-if="product">
+        <v-alert v-if="addedToCart" type="success" variant="tonal" density="compact" class="added-alert">Article ajouté au panier</v-alert>
+
         <div class="d-flex flex-column flex-md-row ga-8" style="max-width: 900px; width: 100%">
             <div class="mb-4">
                 <v-btn variant="text" prepend-icon="mdi-arrow-left" @click="goBack">Retour</v-btn>
@@ -31,7 +33,9 @@
                     </div>
                 </div>
 
-                <v-btn color="primary" :disabled="!isStock || !selectedSize">Ajouter au panier</v-btn>
+                <div class="d-flex align-center ga-2">
+                    <v-btn color="primary" :disabled="!isStock || !selectedSize" @click="addToCart">Ajouter au panier</v-btn>
+                </div>
             </div>
         </div>
     </div>
@@ -79,9 +83,45 @@
     });
 
     const selectedSize = ref(null);
+    const addedToCart = ref(false);
 
     const toggleSize = (size) => {
         selectedSize.value = selectedSize.value === size ? null : size;
+    };
+
+    const addToCart = () => {
+        if (!product.value || !selectedSize.value) return;
+
+        if (typeof window === 'undefined') return;
+
+        const raw = window.localStorage.getItem('cart');
+        let cart = [];
+
+        try {
+            cart = raw ? JSON.parse(raw) : [];
+        } catch (e) {
+            cart = [];
+        }
+
+        cart.push({
+            productId: product.value.id,
+            name: product.value.name,
+            price: product.value.price,
+            sale_price: product.value.sale_price,
+            image: product.value.url,
+            size: selectedSize.value,
+            quantity: 1,
+        });
+
+        window.localStorage.setItem('cart', JSON.stringify(cart));
+
+        // Reset taille sélectionnée et afficher la confirmation
+        selectedSize.value = null;
+        addedToCart.value = true;
+
+        setTimeout(() => {
+            addedToCart.value = false;
+        }, 2000);
     };
 
     const goBack = () => {
@@ -93,3 +133,16 @@
         router.push(`/Product/${categoryId.value}`);
     };
 </script>
+
+<style scoped>
+    .product-detail-wrapper {
+        position: relative;
+    }
+
+    .added-alert {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        z-index: 10;
+    }
+</style>
