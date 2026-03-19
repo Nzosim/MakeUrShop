@@ -37,7 +37,7 @@
                 <v-icon size="22">mdi-cart-outline</v-icon>
             </v-btn>
 
-            <v-btn icon to="/User/User" variant="text">
+            <v-btn icon to="/User/Profile" variant="text">
                 <v-icon size="22">mdi-account-outline</v-icon>
             </v-btn>
         </div>
