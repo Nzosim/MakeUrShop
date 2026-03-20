@@ -163,3 +163,23 @@
     font-size: 12px;
     font-weight: 700;
 }
+
+.bin {
+    cursor: pointer;
+}
+
+.bin:hover {
+    color: black !important;
+    transition: color 0.5s ease;
+}
+
+.product-detail-wrapper {
+    position: relative;
+}
+
+.added-alert {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    z-index: 10;
+}

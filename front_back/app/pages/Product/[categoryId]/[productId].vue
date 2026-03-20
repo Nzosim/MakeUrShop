@@ -133,16 +133,3 @@
         router.push(`/Product/${categoryId.value}`);
     };
 </script>
-
-<style scoped>
-    .product-detail-wrapper {
-        position: relative;
-    }
-
-    .added-alert {
-        position: absolute;
-        top: 16px;
-        right: 16px;
-        z-index: 10;
-    }
-</style>
