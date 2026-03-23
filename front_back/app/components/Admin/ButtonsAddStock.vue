@@ -1,23 +1,21 @@
 <script setup>
-    import { shallowRef, watch } from 'vue';
+    import { ref, onMounted } from 'vue';
 
-    const open = shallowRef(false);
-    const fabPosition = shallowRef('absolute');
-    const menuLocation = shallowRef('bottom center');
-    const fabLocation = shallowRef('right bottom');
-    const transition = shallowRef('slide-y-reverse-transition');
-    const popup = shallowRef(false);
+    const brands = ref([]);
+    const selectedBrandId = ref(null);
 
-    function reopen() {
-        open.value = false;
-        setTimeout(() => (open.value = true), 400);
-    }
+    const popup = ref(false);
+    const open = ref(false);
+
+    const { data: dataBrand } = await useFetch('/api/admin/getBrand');
+    brands.value = dataBrand.value.map((brand) => brand.name);
 </script>
 
 <template>
     <div class="demo-panel-absolute">
         <v-fab :key="fabPosition" :absolute="fabPosition === 'absolute'" :app="fabPosition === 'fixed'" color="primary" :location="fabLocation" size="large" icon>
             <v-icon>{{ open ? 'mdi-close' : 'mdi-cog' }}</v-icon>
+
             <v-speed-dial v-model="open" :location="menuLocation" :transition="transition" activator="parent">
                 <v-btn key="3" color="warning" icon>
                     <v-icon size="24">$warning</v-icon>
@@ -27,7 +25,15 @@
                     <v-icon size="24">mdi-minus</v-icon>
                 </v-btn>
 
-                <v-btn key="1" color="success" icon @click="popup = true">
+                <v-btn
+                    key="1"
+                    color="success"
+                    icon
+                    @click="
+                        popup = true;
+                        open = false;
+                    "
+                >
                     <v-icon size="24">mdi-plus</v-icon>
                 </v-btn>
 
@@ -37,16 +43,32 @@
           </v-btn> -->
             </v-speed-dial>
         </v-fab>
+
         <v-dialog v-model="popup" width="500">
             <v-card>
                 <v-card-title class="text-h5">Ajouter un produit</v-card-title>
+
                 <v-card-text>
                     <v-text-field label="Nom du produit" />
                     <v-text-field label="Prix" type="number" />
                     <v-text-field label="Quantité" type="number" />
+
+                    <v-select v-model="selectedBrandId" :items="brands" item-title="name" item-value="id" label="Choisir une marque" variant="outlined" density="compact" />
+
+                    <!-- <v-select
+                        v-model="selectedCategoryId"
+                        :items="categories"
+                        item-title="name"
+                        item-value="id"
+                        label="Choisir une catégorie"
+                        variant="outlined"
+                        density="compact"
+                    /> -->
                 </v-card-text>
+
                 <v-card-actions>
                     <v-spacer />
+                    <v-btn @click="popup = false">Annuler</v-btn>
                     <v-btn color="primary" @click="popup = false">Ajouter</v-btn>
                 </v-card-actions>
             </v-card>
@@ -66,9 +88,11 @@
         padding: 24px;
         min-height: 300px;
     }
+
     .demo-panel-static {
         position: static;
     }
+
     .demo-panel-absolute {
         position: fixed;
         bottom: 20px;
