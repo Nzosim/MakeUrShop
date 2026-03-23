@@ -3,14 +3,8 @@
 
     <ButtonsAddStock />
 
-
-    
     <stock-list :products="data" />
-
-    
-
 </template>
-
 
 <script setup>
     import StockList from '~/components/Admin/StockList.vue';

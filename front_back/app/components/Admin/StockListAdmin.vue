@@ -1,5 +1,5 @@
 <template>
-    <v-container>
+    <v-container fluid class="pa-0">
         <v-row class="font-weight-bold border-b pb-2">
             <v-col cols="2">Nom du stock</v-col>
             <v-col cols="2">Nombre de stock</v-col>

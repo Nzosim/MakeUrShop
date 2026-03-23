@@ -30,14 +30,14 @@
             </v-expansion-panel-title>
 
             <v-expansion-panel-text>
-                <ButtonsEdit :product="product" />
+                <StockListAdmin :product="product" />
             </v-expansion-panel-text>
         </v-expansion-panel>
     </v-expansion-panels>
 </template>
 
 <script setup>
-    import ButtonsEdit from '~/components/Admin/ButtonsEdit.vue';
+    import StockListAdmin from '~/components/Admin/StockListAdmin.vue';
 
     const products = [
         {
