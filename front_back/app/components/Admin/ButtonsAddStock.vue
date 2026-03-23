@@ -6,6 +6,7 @@
     const menuLocation = shallowRef('bottom center');
     const fabLocation = shallowRef('right bottom');
     const transition = shallowRef('slide-y-reverse-transition');
+    const popup = shallowRef(false);
 
     function reopen() {
         open.value = false;
@@ -26,7 +27,7 @@
                     <v-icon size="24">mdi-minus</v-icon>
                 </v-btn>
 
-                <v-btn key="1" color="success" icon>
+                <v-btn key="1" color="success" icon @click="popup = true">
                     <v-icon size="24">mdi-plus</v-icon>
                 </v-btn>
 
@@ -36,6 +37,20 @@
           </v-btn> -->
             </v-speed-dial>
         </v-fab>
+        <v-dialog v-model="popup" width="500">
+            <v-card>
+                <v-card-title class="text-h5">Ajouter un produit</v-card-title>
+                <v-card-text>
+                    <v-text-field label="Nom du produit" />
+                    <v-text-field label="Prix" type="number" />
+                    <v-text-field label="Quantité" type="number" />
+                </v-card-text>
+                <v-card-actions>
+                    <v-spacer />
+                    <v-btn color="primary" @click="popup = false">Ajouter</v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
     </div>
 </template>
 
