@@ -1,14 +1,28 @@
 <script setup>
-    import { ref, onMounted } from 'vue';
+    import { ref, computed, watch } from 'vue';
 
     const brands = ref([]);
     const selectedBrandId = ref(null);
-
+    const selectedParentCategoryId = ref(null);
+    const selectedCategoryId = ref(null);
     const popup = ref(false);
     const open = ref(false);
 
     const { data: dataBrand } = await useFetch('/api/admin/getBrand');
     brands.value = dataBrand.value.map((brand) => brand.name);
+
+    const { data: dataCategories } = await useFetch('/api/admin/getCategories');
+
+    const parentCategories = computed(() => dataCategories.value.filter((c) => c.category_parent_id === null));
+
+    const subCategories = computed(() => {
+        if (!selectedParentCategoryId.value) return [];
+        return dataCategories.value.filter((c) => c.category_parent_id === selectedParentCategoryId.value);
+    });
+
+    watch(selectedParentCategoryId, () => {
+        selectedCategoryId.value = null;
+    });
 </script>
 
 <template>
@@ -46,24 +60,35 @@
 
         <v-dialog v-model="popup" width="500">
             <v-card>
-                <v-card-title class="text-h5">Ajouter un produit</v-card-title>
-
                 <v-card-text>
                     <v-text-field label="Nom du produit" />
-                    <v-text-field label="Prix" type="number" />
-                    <v-text-field label="Quantité" type="number" />
+                    <v-text-field label="Prix" type="number" min="0" />
+                    <v-text-field label="Quantité" type="number" min="0" />
 
                     <v-select v-model="selectedBrandId" :items="brands" item-title="name" item-value="id" label="Choisir une marque" variant="outlined" density="compact" />
 
-                    <!-- <v-select
+                    <v-select
+                        v-model="selectedParentCategoryId"
+                        :items="parentCategories"
+                        item-title="name"
+                        item-value="id"
+                        label="Choisir un sexe"
+                        variant="outlined"
+                        density="compact"
+                        class="mt-2"
+                    />
+
+                    <v-select
                         v-model="selectedCategoryId"
-                        :items="categories"
+                        :items="subCategories"
                         item-title="name"
                         item-value="id"
                         label="Choisir une catégorie"
                         variant="outlined"
                         density="compact"
-                    /> -->
+                        :disabled="!selectedParentCategoryId"
+                        class="mt-2"
+                    />
                 </v-card-text>
 
                 <v-card-actions>
