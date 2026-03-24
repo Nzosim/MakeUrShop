@@ -19,7 +19,6 @@
                                 <img :src="item.image" :alt="item.name" style="width: 60px; height: 60px; object-fit: cover; border-radius: 4px" />
                                 <div>
                                     <p class="font-weight-medium">{{ item.name }}</p>
-                                    <p class="text-caption text-grey">ID: {{ item.productId }}</p>
                                 </div>
                             </div>
                         </td>
