@@ -34,6 +34,8 @@ CREATE TABLE user (
     phone VARCHAR(20),
     role ENUM('admin', 'gestionnaire', 'client') NOT NULL,
     address INT,
+    reset_token VARCHAR(255),
+    reset_token_expiry DATETIME,
     FOREIGN KEY (address) REFERENCES address(id)
 ) ENGINE=InnoDB;
 
@@ -202,7 +204,8 @@ VALUES
 ('admin@shop.fr', 'hashed_pwd', 'Admin', 'Shop', '0600000000', 'admin'),
 ('client1@mail.fr', 'hashed_pwd', 'Lucas', 'Martin', '0611111111', 'client'),
 ('client2@mail.fr', 'hashed_pwd', 'Emma', 'Durand', '0622222222', 'client'),
-('client3@mail.fr', 'hashed_pwd', 'Noah', 'Petit', '0633333333', 'client');
+('client3@mail.fr', 'hashed_pwd', 'Noah', 'Petit', '0633333333', 'client'),
+('admin@makeurshop.fr', '$2b$10$lJpq.y.OVh1tT2kafSUBhOXbWypkYlljp4HRk8TDi22Rj/4rQexQi', 'Admin', 'Istrateur', '0644444444', 'admin');
 
 
 

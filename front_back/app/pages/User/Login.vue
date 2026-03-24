@@ -1,6 +1,6 @@
 <template>
     <v-container>
-        <h1 class="my-12 text-center">Gestion du compte</h1>
+        <h1 class="my-12 text-center">Connectez-vous à votre compte</h1>
 
         <v-row justify="center" align="stretch">
             <v-col cols="12" md="5">
@@ -11,7 +11,10 @@
                         <v-text-field v-model="password" label="Mot de passe" type="password" :rules="rules.password" counter="32" required />
                         <v-alert v-if="showAlert" type="error" class="mb-4">Identifiants incorrects</v-alert>
                         <div class="d-flex justify-center">
-                            <v-btn type="submit" color="primary" class="mt-4 px-8">Connexion</v-btn>
+                            <v-btn type="submit" color="primary" class="mt-4 px-8 categories">Connexion</v-btn>
+                        </div>
+                        <div class="d-flex justify-center mt-4">
+                            <h4><a href="/User/Forgot-password">Mot de passe oublié ?</a></h4>
                         </div>
                     </v-form>
                 </v-card>
@@ -22,7 +25,7 @@
                     <div class="text-h6 text-center mb-4">Nouveau ici ?</div>
                     <p class="text-center mb-6">Créez un compte pour accéder à toutes nos fonctionnalités.</p>
 
-                    <v-btn color="primary" variant="flat" class="px-8" href="/User/Register">Créer un compte</v-btn>
+                    <v-btn color="primary" variant="flat" class="px-8 categories" href="/User/Register">Créer un compte</v-btn>
                 </v-card>
             </v-col>
         </v-row>
