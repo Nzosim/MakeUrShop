@@ -1,7 +1,7 @@
-<template>
-    <AdminNavbar />
-</template>
+<template></template>
 
 <script setup>
-    import AdminNavbar from '~/components/Admin/AdminNavbar.vue';
+    definePageMeta({
+        layout: 'admin',
+    });
 </script>

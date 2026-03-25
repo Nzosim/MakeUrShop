@@ -7,6 +7,10 @@
 </template>
 
 <script setup>
+    definePageMeta({
+        layout: 'admin',
+    });
+
     import StockList from '~/components/Admin/StockList.vue';
     import ButtonsAddStock from '~/components/Admin/ButtonsAddStock.vue';
 
