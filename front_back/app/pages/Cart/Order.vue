@@ -151,6 +151,10 @@
 </template>
 
 <script setup>
+    useHead({
+        title: 'Paiement | MakeUrStore',
+    });
+
     const customer = reactive({
         firstName: '',
         lastName: '',
@@ -514,7 +518,7 @@
             elements: elementsRef.value,
             confirmParams: {
                 receipt_email: customer.email,
-                return_url: `${window.location.origin}/Cart/View`,
+                return_url: `${window.location.origin}/Cart/Result`,
                 payment_method_data: {
                     billing_details: {
                         name: `${customer.firstName} ${customer.lastName}`,
@@ -552,7 +556,7 @@
         feedback.value = 'Paiement validé. Redirection vers votre recapitulatif...';
         feedbackType.value = 'success';
         clearCartAfterPayment();
-        navigateTo('/Cart/View');
+        navigateTo('/Cart/Result');
     }
 
     onMounted(() => {

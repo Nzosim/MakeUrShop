@@ -60,6 +60,10 @@
 </template>
 
 <script setup>
+    useHead({
+        title: 'Panier | MakeUrStore',
+    });
+
     const cartItems = ref([]);
     const cartValuesLocalStorage = ref([]);
 
