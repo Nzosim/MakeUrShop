@@ -7,6 +7,7 @@
         <v-main>
             <slot />
         </v-main>
+        <AdminRedirectionButton v-if="user && user.role === 'admin'" />
         <Footer />
     </v-app>
 </template>
@@ -15,6 +16,7 @@
     import Navbar from '../components/Main/Navbar.vue';
     import Footer from '../components/Main/Footer.vue';
     import LoadingScreen from '../components/Main/LoadingScreen.vue';
+    import AdminRedirectionButton from '~/components/Main/AdminRedirectionButton.vue';
     const nuxtApp = useNuxtApp();
     const isLoading = ref(false);
 
