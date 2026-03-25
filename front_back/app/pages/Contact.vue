@@ -2,7 +2,7 @@
     <v-container>
         <v-col>
             <v-row justify="center" class="mt-12">
-                <v-col cols="8" md="5">
+                <v-col cols="12" md="5">
                     <v-card class="pa-4 border-accent" rounded="lg">
                         <h2 class="text-center my-2">Nous retrouver</h2>
 
@@ -23,7 +23,7 @@
                         </p>
                     </v-card>
                 </v-col>
-                <v-col cols="3" md="4">
+                <v-col cols="12" md="4">
                     <v-card class="pa-4 border-accent" rounded="lg">
                         <h2 class="text-center my-2">Nous contacter</h2>
 
