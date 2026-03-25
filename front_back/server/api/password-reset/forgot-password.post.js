@@ -31,7 +31,7 @@ export default defineEventHandler(async (event) => {
 
     try {
         await transporter.sendMail({
-            from: `"MakeUrStore" <${process.env.MAIL_USER}>`,
+            from: `"MakeUrShop" <${process.env.MAIL_USER}>`,
             to: email,
             subject: 'Réinitialisation du mot de passe',
             html: `
