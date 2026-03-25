@@ -1,6 +1,5 @@
 <template>
-    <h1>Articles</h1>
-    <ButtonsAddStock />
+    <ButtonAddProduct />
     <ProductListAdmin />
 </template>
 
@@ -9,6 +8,6 @@
         layout: 'admin',
     });
 
-    import ButtonsAddStock from '~/components/Admin/ButtonsAddStock.vue';
+    import ButtonAddProduct from '~/components/Admin/ButtonAddProduct.vue';
     import ProductListAdmin from '~/components/Admin/ProductListAdmin.vue';
 </script>
