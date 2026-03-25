@@ -11,6 +11,10 @@
     </v-alert>
 
     <div class="pa-8">
+        <div class="mb-4">
+            <v-btn variant="text" prepend-icon="mdi-arrow-left" @click="goBack">Retour</v-btn>
+        </div>
+
         <h1 class="mb-6">Panier</h1>
 
         <div v-if="cartItems.length">
@@ -60,6 +64,15 @@
     const cartValuesLocalStorage = ref([]);
 
     const passOrder = ref(false);
+
+    const goBack = async () => {
+        if (typeof window !== 'undefined' && window.history.length > 1) {
+            window.history.back();
+            return;
+        }
+
+        await navigateTo('/');
+    };
 
     onMounted(() => {
         if (typeof window === 'undefined') return;

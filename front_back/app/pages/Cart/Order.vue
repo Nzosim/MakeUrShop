@@ -1,5 +1,9 @@
 <template>
     <section class="checkout-page" :style="pageThemeVars">
+        <div class="mb-4 checkout-back-wrap">
+            <v-btn variant="text" prepend-icon="mdi-arrow-left" @click="goBack">Retour</v-btn>
+        </div>
+
         <div class="bg-shape bg-shape-a"></div>
         <div class="bg-shape bg-shape-b"></div>
 
@@ -574,6 +578,15 @@
 
         initStripe();
     });
+
+    const goBack = async () => {
+        if (typeof window !== 'undefined' && window.history.length > 1) {
+            window.history.back();
+            return;
+        }
+
+        await navigateTo('/Cart/Cart');
+    };
 </script>
 
 <style scoped>
@@ -581,9 +594,13 @@
         position: relative;
         min-height: 100vh;
         padding: 3rem 1rem 4rem;
-        background-color: white;
         font-family: 'DM Sans', sans-serif;
         color: var(--ink);
+    }
+
+    .checkout-back-wrap {
+        position: relative;
+        z-index: 3;
     }
 
     .bg-shape {
@@ -591,6 +608,7 @@
         z-index: 0;
         filter: blur(30px);
         opacity: 0.35;
+        pointer-events: none;
     }
 
     .bg-shape-a {

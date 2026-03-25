@@ -1,6 +1,15 @@
 <template>
     <div class="pa-8 d-flex justify-center product-detail-wrapper" v-if="product">
-        <v-alert v-if="addedToCart" type="success" variant="tonal" density="compact" class="added-alert">Article ajouté au panier</v-alert>
+        <v-alert
+            v-if="addedToCart"
+            type="success"
+            variant="tonal"
+            density="compact"
+            class="added-alert"
+            style="position: absolute; top: 14px; right: 24px; width: auto; min-width: 260px; max-width: 380px; z-index: 100"
+        >
+            Article ajouté au panier
+        </v-alert>
 
         <div class="d-flex flex-column flex-md-row ga-8" style="max-width: 900px; width: 100%">
             <div class="mb-4">
