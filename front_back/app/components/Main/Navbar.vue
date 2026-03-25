@@ -43,7 +43,7 @@
                 </v-icon>
             </v-btn>
 
-            <v-btn icon to="/Cart/Cart" variant="text">
+            <v-btn icon to="/Cart/View" variant="text">
                 <v-icon size="22">mdi-cart-outline</v-icon>
             </v-btn>
 
