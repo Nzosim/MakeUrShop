@@ -183,3 +183,30 @@
     right: 16px;
     z-index: 10;
 }
+
+.result-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+}
+
+.result-card {
+    width: 100%;
+    max-width: 700px;
+    background: rgba(255, 255, 255, 0.88);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 18px;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+    padding: 1.5rem;
+}
+
+.result-text {
+    color: #4c4d5f;
+}
+
+.result-actions {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
