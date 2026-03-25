@@ -6,11 +6,11 @@
             </v-list-item>
         </v-list>
         <v-list density="compact" nav active-color="primary">
-            <v-list-item prepend-icon="mdi-home" title="Accueil" value="prout"></v-list-item>
-            <v-list-item prepend-icon="mdi-cart" title="Commandes" value="prout2"></v-list-item>
-            <v-list-item prepend-icon="mdi-tag" title="Produits" value="myfiles"></v-list-item>
-            <v-list-item prepend-icon="mdi-face-man-profile" title="Clients" value="shared"></v-list-item>
-            <v-list-item prepend-icon="mdi-poll" title="Statistiques" value="starred"></v-list-item>
+            <v-list-item prepend-icon="mdi-home" title="Accueil" value="prout" href="/Dashboard/main"></v-list-item>
+            <v-list-item prepend-icon="mdi-cart" title="Commandes" value="prout2" href="/Dashboard/Order"></v-list-item>
+            <v-list-item prepend-icon="mdi-tag" title="Produits" value="myfiles" href="/Dashboard/ArticleList"></v-list-item>
+            <v-list-item prepend-icon="mdi-face-man-profile" title="Clients" value="shared" href="/Dashboard/Accounts"></v-list-item>
+            <v-list-item prepend-icon="mdi-poll" title="Statistiques" value="starred" href="/Dashboard/Stats"></v-list-item>
         </v-list>
 
         <v-divider></v-divider>
@@ -23,8 +23,6 @@
             ></v-list-item>
         </v-list>
     </v-navigation-drawer>
-
-    <v-main style="height: 280px"></v-main>
 </template>
 
 <style>
