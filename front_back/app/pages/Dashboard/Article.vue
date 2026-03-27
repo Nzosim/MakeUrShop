@@ -1,6 +1,5 @@
 <template>
     <ButtonAddProduct />
-    <ProductListAdmin />
 </template>
 
 <script setup>
@@ -9,5 +8,4 @@
     });
 
     import ButtonAddProduct from '~/components/Admin/ButtonAddProduct.vue';
-    import ProductListAdmin from '~/components/Admin/ProductListAdmin.vue';
 </script>
