@@ -9,6 +9,7 @@ export default defineEventHandler(async (event) => {
             p.name AS product_name,
             p.price,
             p.creation_date,
+            p.image,
             s.id AS stock_id,
             s.size,
             s.stock_number
@@ -17,5 +18,13 @@ export default defineEventHandler(async (event) => {
         ORDER BY p.id DESC
     `);
 
-    return rows;
+    console.log('image exemple:', rows[0]?.image);
+    console.log('type:', typeof rows[0]?.image);
+
+    const serialized = rows.map((row) => ({
+        ...row,
+        image: row.image ? `data:image/jpeg;base64,${Buffer.from(row.image).toString('base64')}` : null,
+    }));
+
+    return serialized;
 });
