@@ -82,6 +82,16 @@
     const accountEdited = ref(false);
     const user = useState('user');
 
+    watch(
+        user,
+        (val) => {
+            if (!val) {
+                navigateTo('/User/Login');
+            }
+        },
+        { immediate: true }
+    );
+
     const isEditing = ref(false);
     const editableUser = ref({});
 
@@ -101,10 +111,8 @@
 
                 isEditing.value = false;
 
-                // ✅ Afficher l'alerte
                 accountEdited.value = true;
 
-                // ⏳ Disparaît après 3 secondes
                 setTimeout(() => {
                     accountEdited.value = false;
                 }, 3000);
