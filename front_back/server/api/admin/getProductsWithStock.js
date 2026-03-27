@@ -18,9 +18,6 @@ export default defineEventHandler(async (event) => {
         ORDER BY p.id DESC
     `);
 
-    console.log('image exemple:', rows[0]?.image);
-    console.log('type:', typeof rows[0]?.image);
-
     const serialized = rows.map((row) => ({
         ...row,
         image: row.image ? `data:image/jpeg;base64,${Buffer.from(row.image).toString('base64')}` : null,

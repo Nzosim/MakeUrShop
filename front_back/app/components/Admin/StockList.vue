@@ -1,6 +1,6 @@
 <template>
     <v-row class="font-weight-bold text-caption text-grey" dense>
-        <v-col cols="4" class="px-3">Taille</v-col>
+        <v-col cols="4" class="px-3">Taille unique</v-col>
         <v-col cols="4" class="px-3">Stock</v-col>
         <v-col cols="4" class="px-3">Statut</v-col>
     </v-row>
@@ -17,7 +17,7 @@
                 </v-chip>
             </v-col>
         </v-row>
-        <v-divider v-if="index < product.stocks.length - 1" />
+        <v-divider v-if="index > 0 && index < product.stocks.length - 1" />
     </template>
 
     <v-row v-if="!product.stocks?.length" dense>
