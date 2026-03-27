@@ -392,6 +392,55 @@
         return response.clientSecret;
     }
 
+    function getConnectedUserId() {
+        if (typeof window === 'undefined') return null;
+
+        try {
+            const user = window.localStorage.getItem('user');
+            if (!user) return null;
+
+            const getUser = JSON.parse(user);
+            const id = Number(getUser?.id);
+            if (!Number.isInteger(id) || id <= 0) return null;
+
+            return id;
+        } catch {
+            return null;
+        }
+    }
+
+    async function savePaidOrder() {
+        const userId = getConnectedUserId();
+        if (!userId) throw new Error('Utilisateur non connecté. Veuillez vous reconnecter.');
+
+        const items = cartItems.value.map((item) => ({
+            productId: Number(item.productId),
+            quantity: Number(item.quantity),
+            unitPrice: Number(item.price),
+        }));
+
+        await $fetch(`/api/order/addOrder?id=${userId}`, {
+            method: 'POST',
+            body: {
+                statut: 'payee',
+                total: Number(total.value),
+                items,
+                shippingAddress: {
+                    address: shippingAddress.value.line1,
+                    zip_code: shippingAddress.value.postal_code,
+                    city: shippingAddress.value.city,
+                    country: 'France',
+                },
+                billingAddress: {
+                    address: customer.address,
+                    zip_code: customer.postalCode,
+                    city: customer.city,
+                    country: 'France',
+                },
+            },
+        });
+    }
+
     async function initStripe() {
         if (isInitializingStripe.value) {
             return;
@@ -549,6 +598,14 @@
 
         if (result.error) {
             feedback.value = result.error.message || 'Le paiement a echoué, veuillez reessayer.';
+            feedbackType.value = 'error';
+            return;
+        }
+
+        try {
+            await savePaidOrder();
+        } catch (error) {
+            feedback.value = error?.data?.statusMessage || error?.message || 'Paiement validé mais sauvegarde de commande échouée.';
             feedbackType.value = 'error';
             return;
         }
