@@ -498,10 +498,16 @@
             },
         });
 
-        paymentElementRef.value.mount('#payment-element');
-        paymentElementRef.value.on('change', (event) => {
-            paymentElementComplete.value = !!event.complete;
-        });
+        await nextTick();
+
+        const paymentElement = document.querySelector('#payment-element');
+        if (paymentElement) {
+            paymentElementRef.value.mount('#payment-element');
+            paymentElementRef.value.on('change', (event) => {
+                paymentElementComplete.value = !!event.complete;
+            });
+        }
+
         stripeReady.value = true;
         isInitializingStripe.value = false;
     }
@@ -613,6 +619,34 @@
         feedback.value = 'Paiement validé. Redirection vers votre recapitulatif...';
         feedbackType.value = 'success';
         clearCartAfterPayment();
+
+        const successMessage = ref('');
+        const errorMessage = ref('');
+        const debugResetLink = ref('');
+
+        successMessage.value = '';
+        errorMessage.value = '';
+        debugResetLink.value = '';
+
+        console.log("Envoi de l'email de confirmation pour", customer.email);
+
+        try {
+            const response = await $fetch('/api/order/send-confirmation', {
+                method: 'POST',
+                body: { email: customer.email },
+            });
+
+            if (response?.debug?.userFound === false) {
+                errorMessage.value = 'Aucun compte trouvé avec cet email.';
+            } else {
+                successMessage.value = response?.message || 'Email envoyé.';
+            }
+
+            debugResetLink.value = response?.resetLink || '';
+        } catch (error) {
+            errorMessage.value = error?.data?.statusMessage || error?.data?.message || 'Une erreur est survenue.';
+        }
+
         navigateTo('/Cart/Result');
     }
 
