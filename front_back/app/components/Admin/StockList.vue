@@ -1,33 +1,35 @@
-<script setup>
-
-    const props = defineProps({
-        products: Array,
-    })
-</script>
-
 <template>
-    <v-table theme="dark">
-        <thead>
-        <tr>
-            <th class="text-left">Nom du produit</th>
-            <th class="text-left">Id stock</th>
-            <th class="text-left">Date de publication</th>
-            <th class="text-left">Stock</th>
-            <th class="text-left">Price</th>
-        </tr>
-        </thead>
+    <v-row class="font-weight-bold text-caption text-grey" dense>
+        <v-col cols="4" class="px-3">Taille unique</v-col>
+        <v-col cols="4" class="px-3">Stock</v-col>
+        <v-col cols="4" class="px-3">Statut</v-col>
+    </v-row>
 
-        <tbody>
-        <tr
-            v-for="item in products"
-            :key="item.product_name"
-        >
-            <td>{{ item.product_name }}</td>
-            <td>{{ item.product_id}}</td>
-            <td>{{ item.creation_date}}</td>
-            <td>{{ item.stock_number}}</td>
-            <td>{{ item.price }}</td>
-        </tr>
-        </tbody>
-    </v-table>
+    <v-divider class="my-1" />
+
+    <template v-for="(stock, index) in product.stocks" :key="stock.id">
+        <v-row align="center" dense>
+            <v-col cols="4" class="px-3 py-2">{{ stock.size }}</v-col>
+            <v-col cols="4" class="px-3 py-2">{{ stock.stock_number }}</v-col>
+            <v-col cols="4" class="px-3 py-2">
+                <v-chip :color="stock.stock_number > 0 ? 'success' : 'error'" size="small" variant="flat">
+                    {{ stock.stock_number > 0 ? 'Disponible' : 'Épuisé' }}
+                </v-chip>
+            </v-col>
+        </v-row>
+        <v-divider v-if="index > 0 && index < product.stocks.length - 1" />
+    </template>
+
+    <v-row v-if="!product.stocks?.length" dense>
+        <v-col class="px-3 py-2 text-grey text-caption">Aucun stock enregistré</v-col>
+    </v-row>
 </template>
+
+<script setup>
+    defineProps({
+        product: {
+            type: Object,
+            required: true,
+        },
+    });
+</script>

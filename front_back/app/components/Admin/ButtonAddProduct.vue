@@ -1,5 +1,4 @@
 <script setup>
-    import { ref } from 'vue';
     import PopupProductStock from '~/components/Admin/PopupProductStock.vue';
 
     const open = ref(false);
@@ -43,5 +42,6 @@
         position: fixed;
         bottom: 20px;
         right: 20px;
+        z-index: 1000;
     }
 </style>
