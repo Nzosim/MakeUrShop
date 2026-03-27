@@ -13,9 +13,8 @@
             <v-list-item prepend-icon="mdi-poll" title="Statistiques" value="starred" href="/Dashboard/Stats"></v-list-item>
         </v-list>
 
-        <v-divider></v-divider>
-
-        <v-list>
+        <v-list style="position: absolute; bottom: 10px; width: 100%">
+            <v-divider></v-divider>
             <v-list-item
                 prepend-avatar="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQN0p9Jer0iBCVzxQGUsNyXAgk_osWJU8arSw&s"
                 subtitle="Administrateur"
