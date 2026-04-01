@@ -2,8 +2,8 @@
     <v-card class="mt-5 ml-5 mr-5 pa-6" rounded="lg">
         <h2 class="text-h5 mb-6 text-accent font-weight-bold">Gestion des commandes</h2>
 
-        <v-list v-if="orders.length > 0">
-            <v-list-item v-for="order in orders" :key="order.id" class="flex-column align-stretch" @click="toggleOrder(order.id)" style="cursor: pointer">
+        <v-list v-if="sortedOrders.length > 0">
+            <v-list-item v-for="order in sortedOrders" :key="order.id" class="flex-column align-stretch" @click="toggleOrder(order.id)" style="cursor: pointer">
                 <!-- Résumé de la commande avec icône -->
                 <div class="d-flex justify-space-between align-center w-100">
                     <span class="font-weight-bold">Commande #{{ order.id }}</span>
@@ -26,7 +26,13 @@
                     </v-stepper-header>
                 </v-stepper>
 
-                <!-- Détails produits (menu déroulant) -->
+                <div class="d-flex justify-end mb-4">
+                    <v-btn v-if="canAdvanceStatus(order.statut)" color="primary" size="small" @click.stop="advanceOrderStatus(order)" :loading="updatingOrderId === order.id">
+                        {{ getNextStatusLabel(order.statut) }}
+                    </v-btn>
+                    <span v-else class="text-grey text-caption">Commande finalisée</span>
+                </div>
+
                 <v-expand-transition>
                     <div v-if="expandedOrder === order.id" class="mt-4 ml-4">
                         <v-list dense class="bg-grey-lighten-4 rounded px-0">
@@ -66,10 +72,32 @@
 </template>
 
 <script setup>
-    import { ref } from 'vue';
+    import { computed, ref } from 'vue';
 
     const orders = ref([]);
     const expandedOrder = ref(null);
+    const updatingOrderId = ref(null);
+
+    const sortedOrders = computed(() => {
+        const statusOrder = {
+            en_attente: 1,
+            payee: 2,
+            expediee: 3,
+            livree: 4,
+            annulee: 5,
+        };
+
+        return [...orders.value].sort((a, b) => {
+            const stepA = statusOrder[a.statut] || 999;
+            const stepB = statusOrder[b.statut] || 999;
+
+            if (stepA !== stepB) {
+                return stepA - stepB;
+            }
+
+            return new Date(b.order_date).getTime() - new Date(a.order_date).getTime();
+        });
+    });
 
     const fetchOrders = async () => {
         try {
@@ -111,6 +139,43 @@
 
     function toggleOrder(id) {
         expandedOrder.value = expandedOrder.value === id ? null : id;
+    }
+
+    function canAdvanceStatus(status) {
+        return status !== 'livree' && status !== 'annulee';
+    }
+
+    function getNextStatusLabel(status) {
+        const labels = {
+            en_attente: 'Marquer comme payée',
+            payee: 'Marquer comme expédiée',
+            expediee: 'Marquer comme livrée',
+        };
+        return labels[status] || 'Mettre à jour';
+    }
+
+    async function advanceOrderStatus(order) {
+        try {
+            updatingOrderId.value = order.id;
+            const result = await $fetch('/api/order/updateOrderStatus', {
+                method: 'POST',
+                body: {
+                    orderId: order.id,
+                },
+            });
+
+            if (result.success) {
+                // MAJ local
+                const index = orders.value.findIndex((o) => o.id === order.id);
+                if (index !== -1) {
+                    orders.value[index].statut = result.newStatus;
+                }
+            }
+        } catch (error) {
+            console.error('Erreur lors de la mise à jour du statut:', error);
+        } finally {
+            updatingOrderId.value = null;
+        }
     }
 </script>
 
