@@ -1,6 +1,8 @@
 <template>
-    <ButtonAddProduct />
-    <ProductListAdmin />
+    <v-card class="mt-5 ml-5 mr-5 pa-6" rounded="lg">   
+        <ButtonAddProduct />
+        <ProductListAdmin />
+    </v-card>
 </template>
 
 <script setup>
