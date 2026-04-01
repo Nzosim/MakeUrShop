@@ -26,7 +26,13 @@
                     </v-stepper-header>
                 </v-stepper>
 
-                <!-- Détails produits (menu déroulant) -->
+                <div class="d-flex justify-end mb-4">
+                    <v-btn v-if="canAdvanceStatus(order.statut)" color="primary" size="small" @click.stop="advanceOrderStatus(order)" :loading="updatingOrderId === order.id">
+                        {{ getNextStatusLabel(order.statut) }}
+                    </v-btn>
+                    <span v-else class="text-grey text-caption">Commande finalisée</span>
+                </div>
+
                 <v-expand-transition>
                     <div v-if="expandedOrder === order.id" class="mt-4 ml-4">
                         <v-list dense class="bg-grey-lighten-4 rounded px-0">
@@ -70,6 +76,7 @@
 
     const orders = ref([]);
     const expandedOrder = ref(null);
+    const updatingOrderId = ref(null);
 
     const sortedOrders = computed(() => {
         const statusOrder = {
@@ -132,6 +139,43 @@
 
     function toggleOrder(id) {
         expandedOrder.value = expandedOrder.value === id ? null : id;
+    }
+
+    function canAdvanceStatus(status) {
+        return status !== 'livree' && status !== 'annulee';
+    }
+
+    function getNextStatusLabel(status) {
+        const labels = {
+            en_attente: 'Marquer comme payée',
+            payee: 'Marquer comme expédiée',
+            expediee: 'Marquer comme livrée',
+        };
+        return labels[status] || 'Mettre à jour';
+    }
+
+    async function advanceOrderStatus(order) {
+        try {
+            updatingOrderId.value = order.id;
+            const result = await $fetch('/api/order/updateOrderStatus', {
+                method: 'POST',
+                body: {
+                    orderId: order.id,
+                },
+            });
+
+            if (result.success) {
+                // MAJ local
+                const index = orders.value.findIndex((o) => o.id === order.id);
+                if (index !== -1) {
+                    orders.value[index].statut = result.newStatus;
+                }
+            }
+        } catch (error) {
+            console.error('Erreur lors de la mise à jour du statut:', error);
+        } finally {
+            updatingOrderId.value = null;
+        }
     }
 </script>
 
