@@ -9,7 +9,7 @@ export default defineNuxtConfig({
             stripePublishableKey: '',
         },
     },
-    modules: ['vuetify-nuxt-module'],
+    modules: ['vuetify-nuxt-module', '@nuxt/ui'],
     css: ['vuetify/styles', '@mdi/font/css/materialdesignicons.css', './app/assets/css/Product/Display.css', './app/assets/css/main.css', './app/assets/css/navbar.css'],
     vuetify: {
         moduleOptions: {
