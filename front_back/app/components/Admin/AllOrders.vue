@@ -1,9 +1,28 @@
 <template>
     <v-card class="mt-5 ml-5 mr-5 pa-6" rounded="lg">
-        <h2 class="text-h5 mb-6 text-accent font-weight-bold">Gestion des commandes</h2>
+        <div class="d-flex justify-space-between align-center mb-6">
+            <div>
+                <h2 class="text-h5 text-accent font-weight-bold mb-1">Gestion des commandes</h2>
+                <p class="text-caption text-medium-emphasis mb-0">Affichage admin des commandes clients</p>
+            </div>
+
+            <div class="d-flex align-center" style="gap: 12px; min-width: 320px">
+                <v-select
+                    v-model="selectedSort"
+                    :items="sortOptions"
+                    item-title="title"
+                    item-value="value"
+                    :return-object="false"
+                    label="Trier par"
+                    variant="outlined"
+                    density="compact"
+                    hide-details
+                />
+            </div>
+        </div>
 
         <v-list v-if="sortedOrders.length > 0">
-            <v-list-item v-for="order in sortedOrders" :key="order.id" class="flex-column align-stretch" @click="toggleOrder(order.id)" style="cursor: pointer">
+            <v-list-item v-for="order in sortedOrders" :key="order.id" class="flex-column align-stretch" @click="changeOrder(order.id)" style="cursor: pointer">
                 <!-- Résumé de la commande avec icône -->
                 <div class="d-flex justify-space-between align-center w-100">
                     <span class="font-weight-bold">Commande #{{ order.id }}</span>
@@ -77,6 +96,17 @@
     const orders = ref([]);
     const expandedOrder = ref(null);
     const updatingOrderId = ref(null);
+    const selectedSort = ref('status_date');
+    const sortOptions = [
+        { title: 'Type puis date', value: 'status_date' },
+        { title: 'Date puis type', value: 'date_status' },
+        { title: 'Date (plus récente)', value: 'date_desc' },
+        { title: 'Date (plus ancienne)', value: 'date_asc' },
+        { title: 'Montant total (décroissant)', value: 'total_desc' },
+        { title: 'Montant total (croissant)', value: 'total_asc' },
+        { title: 'Numéro de commande (décroissant)', value: 'id_desc' },
+        { title: 'Numéro de commande (croissant)', value: 'id_asc' },
+    ];
 
     const sortedOrders = computed(() => {
         const statusOrder = {
@@ -87,15 +117,48 @@
             annulee: 5,
         };
 
+        const sortKey = typeof selectedSort.value === 'string' ? selectedSort.value : selectedSort.value?.value || 'status_date';
+
         return [...orders.value].sort((a, b) => {
             const stepA = statusOrder[a.statut] || 999;
             const stepB = statusOrder[b.statut] || 999;
 
-            if (stepA !== stepB) {
-                return stepA - stepB;
-            }
+            const dateA = new Date(a.order_date).getTime();
+            const dateB = new Date(b.order_date).getTime();
+            const totalA = Number(a.total || 0);
+            const totalB = Number(b.total || 0);
 
-            return new Date(b.order_date).getTime() - new Date(a.order_date).getTime();
+            switch (sortKey) {
+                case 'status_date':
+                    if (stepA !== stepB) return stepA - stepB;
+                    return dateB - dateA;
+
+                case 'date_status':
+                    if (dateA !== dateB) return dateB - dateA;
+                    return stepA - stepB;
+
+                case 'date_desc':
+                    return dateB - dateA;
+
+                case 'date_asc':
+                    return dateA - dateB;
+
+                case 'total_desc':
+                    return totalB - totalA;
+
+                case 'total_asc':
+                    return totalA - totalB;
+
+                case 'id_desc':
+                    return b.id - a.id;
+
+                case 'id_asc':
+                    return a.id - b.id;
+
+                default:
+                    if (stepA !== stepB) return stepA - stepB;
+                    return dateB - dateA;
+            }
         });
     });
 
@@ -137,7 +200,7 @@
         return steps[status] || 1;
     }
 
-    function toggleOrder(id) {
+    function changeOrder(id) {
         expandedOrder.value = expandedOrder.value === id ? null : id;
     }
 
