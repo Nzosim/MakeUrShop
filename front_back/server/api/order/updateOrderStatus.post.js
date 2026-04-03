@@ -1,4 +1,5 @@
 import { getDB } from '../../utils/db.js';
+import { buildOrderStatusMail, sendProjectMail } from '../../utils/mailer.js';
 
 export default defineEventHandler(async (event) => {
     const body = await readBody(event);
@@ -12,7 +13,12 @@ export default defineEventHandler(async (event) => {
     try {
         const db = await getDB();
 
-        const requestGetStatus = 'SELECT statut FROM orders WHERE id = ?';
+        const requestGetStatus = `
+            SELECT o.statut, u.email, u.firstname
+            FROM orders o
+            INNER JOIN user u ON u.id = o.user_id
+            WHERE o.id = ?
+        `;
         const [orders] = await db.query(requestGetStatus, [orderId]);
 
         if (orders.length === 0) {
@@ -21,6 +27,8 @@ export default defineEventHandler(async (event) => {
         }
 
         const currentStatus = orders[0].statut;
+        const customerEmail = orders[0].email;
+        const customerFirstName = orders[0].firstname;
 
         const statusProgression = {
             en_attente: 'payee',
@@ -46,11 +54,33 @@ export default defineEventHandler(async (event) => {
         const requestUpdateStatus = 'UPDATE orders SET statut = ? WHERE id = ?';
         await db.query(requestUpdateStatus, [nextStatus, orderId]);
 
+        let mailSent = false;
+
+        if (customerEmail) {
+            try {
+                await sendProjectMail({
+                    to: customerEmail,
+                    subject: `Mise a jour de votre commande #${orderId} - MakeUrShop`,
+                    html: buildOrderStatusMail({
+                        orderId,
+                        previousStatus: currentStatus,
+                        nextStatus,
+                        firstName: customerFirstName,
+                    }),
+                });
+
+                mailSent = true;
+            } catch (mailError) {
+                console.error('Erreur envoi email statut commande:', mailError);
+            }
+        }
+
         return {
             success: true,
             message: `Commande passée de ${currentStatus} à ${nextStatus}`,
             orderId,
             newStatus: nextStatus,
+            mailSent,
         };
     } catch (error) {
         console.error('Erreur lors de la mise à jour du statut:', error);

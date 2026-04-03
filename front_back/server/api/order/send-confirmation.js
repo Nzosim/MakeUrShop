@@ -1,4 +1,4 @@
-import { transporter } from '../../utils/mailer';
+import { buildOrderConfirmationMail, sendProjectMail } from '../../utils/mailer.js';
 
 export default defineEventHandler(async (event) => {
     const { email } = await readBody(event);
@@ -8,14 +8,10 @@ export default defineEventHandler(async (event) => {
     }
 
     try {
-        await transporter.sendMail({
-            from: `"MakeUrShop" <${process.env.MAIL_USER}>`,
+        await sendProjectMail({
             to: email,
             subject: 'Confirmation commande - MakeUrShop',
-            html: `
-                <h2>Confirmation commande</h2>
-                <p>Merci pour votre commande sur MakeUrShop.</p>
-            `,
+            html: buildOrderConfirmationMail(),
         });
 
         return {
