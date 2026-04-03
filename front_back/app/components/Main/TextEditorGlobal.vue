@@ -210,7 +210,7 @@
                     v-slot="{ editor }"
                     v-model="value"
                     content-type="markdown"
-                    :placeholder="isLoading ? 'Chargement...' : 'Appuie sur / pour voir les commandes...'"
+                    :placeholder="isLoading ? 'Chargement...' : 'Appuyer sur / pour voir les commandes...'"
                     class="ue-editor w-full min-h-[500px] bg-secondary text-white border border-gray-700 rounded-lg p-6"
                 >
                     <UEditorToolbar :editor="editor" :items="toolbarItems" layout="bubble" class="bg-secondary text-white border border-gray-700 shadow-md rounded-md mb-4" />
