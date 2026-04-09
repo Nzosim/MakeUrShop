@@ -45,7 +45,17 @@
                     </v-stepper-header>
                 </v-stepper>
 
-                <div class="d-flex justify-end mb-4">
+                <div class="d-flex justify-end align-center mb-4" style="gap: 8px">
+                    <v-btn
+                        v-if="order.statut === 'payee'"
+                        color="secondary"
+                        variant="outlined"
+                        size="small"
+                        @click.stop="generateShippingSlip(order)"
+                        :loading="generatedOrderId === order.id"
+                    >
+                        Générer le bordereau
+                    </v-btn>
                     <v-btn v-if="canAdvanceStatus(order.statut)" color="primary" size="small" @click.stop="advanceOrderStatus(order)" :loading="updatingOrderId === order.id">
                         {{ getNextStatusLabel(order.statut) }}
                     </v-btn>
@@ -96,6 +106,7 @@
     const orders = ref([]);
     const expandedOrder = ref(null);
     const updatingOrderId = ref(null);
+    const generatedOrderId = ref(null);
     const selectedSort = ref('status_date');
     const sortOptions = [
         { title: 'Type puis date', value: 'status_date' },
@@ -215,6 +226,151 @@
             expediee: 'Marquer comme livrée',
         };
         return labels[status] || 'Mettre à jour';
+    }
+
+    function getCustomerFullName(order) {
+        const firstName = order?.customer?.firstname || '';
+        const lastName = order?.customer?.lastname || '';
+        const fullName = `${firstName} ${lastName}`.trim();
+        return fullName || 'Client inconnu';
+    }
+
+    function getShippingAddressLines(order) {
+        const shippingAddress = order?.shipping_address || {};
+        const firstLine = shippingAddress.address || 'Adresse inconnue';
+        const cityLine = [shippingAddress.zip_code, shippingAddress.city].filter(Boolean).join(' ');
+        const countryLine = shippingAddress.country || 'Pays inconnu';
+
+        return [firstLine, cityLine || 'Ville inconnue', countryLine];
+    }
+
+    function getShippingSlipReference(order) {
+        const orderDate = new Date(order?.order_date);
+        const safeDate = Number.isNaN(orderDate.getTime()) ? '00000000' : orderDate.toISOString().slice(0, 10).replaceAll('-', '');
+        return `MS-${order?.id || '0'}-${safeDate}`;
+    }
+
+    function drawFakeBarcode(pdf, code, x, y, width, height) {
+        const encoded = String(code || 'MS-0').replaceAll(/\s+/g, '');
+        const bars = [];
+
+        for (const char of encoded) {
+            const charCode = char.charCodeAt(0);
+            for (let bit = 0; bit < 7; bit += 1) {
+                bars.push((charCode >> bit) & 1 ? 2 : 1);
+            }
+            bars.push(1);
+        }
+
+        const totalUnits = bars.reduce((acc, value) => acc + value, 0) || 1;
+        const unitWidth = width / totalUnits;
+        let currentX = x;
+
+        pdf.setDrawColor(30, 30, 30);
+        pdf.rect(x - 1.5, y - 1.5, width + 3, height + 3);
+
+        pdf.setFillColor(25, 25, 25);
+        for (let i = 0; i < bars.length; i += 1) {
+            const barWidth = bars[i] * unitWidth;
+
+            if (i % 2 === 0) {
+                pdf.rect(currentX, y, barWidth, height, 'F');
+            }
+
+            currentX += barWidth;
+        }
+    }
+
+    async function generateShippingSlip(order) {
+        if (import.meta.server) return;
+
+        try {
+            generatedOrderId.value = order.id;
+
+            const { jsPDF } = await import('jspdf');
+            const pdf = new jsPDF({ unit: 'mm', format: 'a4' });
+
+            const marginX = 15;
+            let currentY = 18;
+            const lineHeight = 6;
+            const slipReference = getShippingSlipReference(order);
+
+            drawFakeBarcode(pdf, slipReference, 130, 14, 65, 16);
+            pdf.setFont('helvetica', 'normal');
+            pdf.setFontSize(8);
+            pdf.text(slipReference, 130, 33);
+
+            pdf.setFont('helvetica', 'bold');
+            pdf.setFontSize(18);
+            pdf.text("Bordereau d'envoi", marginX, currentY);
+
+            currentY += 9;
+            pdf.setFont('helvetica', 'normal');
+            pdf.setFontSize(11);
+            pdf.text(`Commande #${order.id}`, marginX, currentY);
+            currentY += lineHeight;
+            pdf.text(`Date de commande : ${formatDate(order.order_date)}`, marginX, currentY);
+
+            currentY += 10;
+            pdf.setFont('helvetica', 'bold');
+            pdf.text('Expediteur', marginX, currentY);
+            currentY += lineHeight;
+            pdf.setFont('helvetica', 'normal');
+            pdf.text('MakeUrStore', marginX, currentY);
+            currentY += lineHeight;
+            pdf.text('Preparation logistique', marginX, currentY);
+
+            currentY += 10;
+            pdf.setFont('helvetica', 'bold');
+            pdf.text('Destinataire', marginX, currentY);
+            currentY += lineHeight;
+            pdf.setFont('helvetica', 'normal');
+            pdf.text(getCustomerFullName(order), marginX, currentY);
+
+            const addressLines = getShippingAddressLines(order);
+            for (const line of addressLines) {
+                currentY += lineHeight;
+                pdf.text(line, marginX, currentY);
+            }
+
+            currentY += 12;
+            pdf.setFont('helvetica', 'bold');
+            pdf.text('Articles a preparer', marginX, currentY);
+            currentY += 4;
+            pdf.line(marginX, currentY, 195, currentY);
+
+            currentY += 8;
+            pdf.setFont('helvetica', 'normal');
+            for (const item of order.items || []) {
+                const quantity = Number(item.quantity || 0);
+                const itemLine = `${quantity} x ${item.name || 'Article sans nom'}`;
+                const wrappedLines = pdf.splitTextToSize(itemLine, 170);
+
+                for (const wrappedLine of wrappedLines) {
+                    if (currentY > 270) {
+                        pdf.addPage();
+                        currentY = 20;
+                    }
+                    pdf.text(wrappedLine, marginX, currentY);
+                    currentY += lineHeight;
+                }
+            }
+
+            currentY += 4;
+            pdf.line(marginX, currentY, 195, currentY);
+            currentY += 8;
+            pdf.setFont('helvetica', 'bold');
+            const totalValue = Number(order.total || 0).toFixed(2);
+            pdf.text(`Total commande : ${totalValue} EUR`, marginX, currentY);
+
+            const orderDate = new Date(order.order_date);
+            const safeDate = Number.isNaN(orderDate.getTime()) ? 'date-inconnue' : orderDate.toISOString().slice(0, 10);
+            pdf.save(`bordereau-commande-${order.id}-${safeDate}.pdf`);
+        } catch (error) {
+            console.error('Erreur lors de la génération du bordereau PDF:', error);
+        } finally {
+            generatedOrderId.value = null;
+        }
     }
 
     async function advanceOrderStatus(order) {
