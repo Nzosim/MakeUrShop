@@ -102,12 +102,18 @@
 
 <script setup>
     import { computed, ref } from 'vue';
+    import appConfig from '~/assets/config.json';
 
     const orders = ref([]);
     const expandedOrder = ref(null);
     const updatingOrderId = ref(null);
     const generatedOrderId = ref(null);
     const selectedSort = ref('status_date');
+    const storeInfo = appConfig?.config?.info || {};
+    const shipperName = storeInfo.storeName || 'MakeUrStore';
+    const shipperAddress = storeInfo.storeAddress || 'Adresse expéditeur non configurée';
+    const shipperPhone = storeInfo.storePhone || '';
+    const shipperEmail = storeInfo.storeEmail || '';
     const sortOptions = [
         { title: 'Type puis date', value: 'status_date' },
         { title: 'Date puis type', value: 'date_status' },
@@ -316,9 +322,24 @@
             pdf.text('Expediteur', marginX, currentY);
             currentY += lineHeight;
             pdf.setFont('helvetica', 'normal');
-            pdf.text('MakeUrStore', marginX, currentY);
+            pdf.text(shipperName, marginX, currentY);
             currentY += lineHeight;
-            pdf.text('Preparation logistique', marginX, currentY);
+
+            const shipperAddressLines = pdf.splitTextToSize(shipperAddress, 90);
+            for (const line of shipperAddressLines) {
+                pdf.text(line, marginX, currentY);
+                currentY += lineHeight;
+            }
+
+            if (shipperPhone) {
+                pdf.text(`Tel : ${shipperPhone}`, marginX, currentY);
+                currentY += lineHeight;
+            }
+
+            if (shipperEmail) {
+                pdf.text(`Email : ${shipperEmail}`, marginX, currentY);
+                currentY += lineHeight;
+            }
 
             currentY += 10;
             pdf.setFont('helvetica', 'bold');
