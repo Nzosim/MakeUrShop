@@ -5,7 +5,6 @@
     const selectedFile = ref('');
     const isLoading = ref(false);
 
-    // Mapping automatique fichier → sous-dossier
     const fileFolderMap = {
         'brand_history.md': 'about',
         'cgv.md': 'cgv',
@@ -154,7 +153,6 @@
     ];
     const appendToBody = import.meta.client ? () => document.body : undefined;
 
-    // Charger le fichier quand le fichier sélectionné change
     watch(selectedFile, async () => {
         const folder = fileFolderMap[selectedFile.value];
         if (!selectedFile.value || !folder) return;
@@ -172,7 +170,6 @@
         }
     });
 
-    // Sauvegarder
     const saveFile = async () => {
         const folder = fileFolderMap[selectedFile.value];
         if (!folder) return alert('Sous-dossier automatique introuvable pour ce fichier');
@@ -192,7 +189,7 @@
 
 <template>
     <div class="pa-6">
-        <v-sheet elevation="2" rounded="xl" class="mb-6 pa-4 d-flex align-center justify-space-between border-thin" color="surface">
+        <v-sheet elevation="2" rounded="lg" class="mb-6 pa-4 d-flex align-center justify-space-between border-thin" color="surface">
             <div class="d-flex align-center flex-grow-1 ml-6">
                 <div style="flex-basis: 300px">
                     <div class="text-caption font-weight-bold text-uppercase opacity-60 mb-1">Fichier à modifier</div>
@@ -203,8 +200,7 @@
             <v-btn @click="saveFile" color="primary" elevation="2" class="rounded-lg categories mr-6">Sauvegarder</v-btn>
         </v-sheet>
 
-        <!-- ZONE D'ÉDITION -->
-        <v-card elevation="2" rounded="xl" border="thin" color="surface">
+        <v-card elevation="2" rounded="lg" border="thin" color="surface">
             <div class="pa-2">
                 <UEditor
                     v-slot="{ editor }"
@@ -222,28 +218,24 @@
 </template>
 
 <style scoped>
-    /* 1. On force l'éditeur à utiliser la couleur de texte du thème Vuetify */
     :deep(.ue-editor) {
         color: inherit;
     }
 
-    /* 2. Les titres et séparateurs suivent automatiquement la couleur du texte */
     :deep(.ue-editor h1),
     :deep(.ue-editor h2),
     :deep(.ue-editor h3),
     :deep(.ue-editor h4),
     :deep(.ue-editor hr) {
-        /* currentColor prend la couleur du texte (blanc en dark, noir en light) */
         color: currentColor !important;
         border-color: currentColor;
-        opacity: 0.9; /* Optionnel : un poil moins agressif que le blanc pur */
+        opacity: 0.9;
     }
 
-    /* 3. Style spécifique pour le séparateur (hr) */
     :deep(.ue-editor hr) {
         border: 0;
         border-top: 1px solid currentColor;
         margin: 2em 0;
-        opacity: 0.2; /* Très discret pour ne pas alourdir le design */
+        opacity: 0.2;
     }
 </style>

@@ -2,25 +2,24 @@ import { getDB } from '../../utils/db.js';
 
 export default defineEventHandler(async (event) => {
     try {
-        const db = getDB();
-        // On s'assure que les noms de colonnes correspondent bien au mapping JS
-        const [rows] = await db.query(`
-            SELECT 
-                u.id as userId, u.firstname, u.lastname, u.email,
-                o.id as orderId, o.statut, o.total, o.order_date,
-                ol.quantity, ol.unit_price,
-                p.name as product_name
-            FROM user u
-            INNER JOIN orders o ON u.id = o.user_id
-            LEFT JOIN order_list ol ON o.id = ol.order_id
-            LEFT JOIN product p ON ol.product_id = p.id
-            ORDER BY o.order_date DESC
-        `);
+        const [rows] = await getDB().query(`
+    SELECT 
+        u.id as userId, u.firstname, u.lastname, u.email,
+        o.id as orderId, o.statut, o.total, o.order_date,
+        ol.quantity, ol.unit_price,
+        p.name as product_name,
+        -- On récupère la date max de commande par utilisateur pour le tri global
+        MAX(o.order_date) OVER(PARTITION BY u.id) as latest_user_order
+    FROM user u
+    LEFT JOIN orders o ON u.id = o.user_id
+    LEFT JOIN order_list ol ON o.id = ol.order_id
+    LEFT JOIN product p ON ol.product_id = p.id
+    ORDER BY latest_user_order DESC, u.id DESC, o.order_date DESC
+`);
 
         const usersMap = new Map();
 
         rows.forEach((row) => {
-            // Création de l'utilisateur s'il n'existe pas dans la Map
             if (!usersMap.has(row.userId)) {
                 usersMap.set(row.userId, {
                     id: row.userId,
@@ -33,7 +32,6 @@ export default defineEventHandler(async (event) => {
 
             const user = usersMap.get(row.userId);
 
-            // Si une commande existe pour cette ligne
             if (row.orderId) {
                 let order = user.orders.find((o) => o.id === row.orderId);
                 if (!order) {
@@ -47,7 +45,6 @@ export default defineEventHandler(async (event) => {
                     user.orders.push(order);
                 }
 
-                // Ajout du produit à la commande
                 if (row.product_name) {
                     order.items.push({
                         name: row.product_name,
@@ -60,10 +57,9 @@ export default defineEventHandler(async (event) => {
 
         return Array.from(usersMap.values());
     } catch (error) {
-        console.error(error); // Toujours loguer l'erreur pour débugger
         throw createError({
             statusCode: 500,
-            statusMessage: 'Erreur base de données : ' + error.message,
+            statusMessage: 'Erreur lors de la récupération des données.',
         });
     }
 });
