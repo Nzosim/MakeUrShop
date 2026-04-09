@@ -11,6 +11,7 @@
             <v-list-item prepend-icon="mdi-tag" title="Produits" value="myfiles" href="/dashboard/article"></v-list-item>
             <v-list-item prepend-icon="mdi-face-man-profile" title="Clients" value="shared" href="/dashboard/accounts"></v-list-item>
             <v-list-item prepend-icon="mdi-poll" title="Statistiques" value="starred" href="/dashboard/stats"></v-list-item>
+            <v-list-item prepend-icon="mdi-text-shadow" title="Textes d'accueil" value="starred" href="/dashboard/home-texts"></v-list-item>
         </v-list>
 
         <v-list style="position: absolute; bottom: 10px; width: 100%">
