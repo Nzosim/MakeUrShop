@@ -72,9 +72,7 @@
                                     </v-avatar>
 
                                     <div class="flex-grow-1">
-                                        <span class="text-subtitle-2 font-weight-medium text-wrap">
-                                            {{ item.name }}
-                                        </span>
+                                        <span class="text-subtitle-2 font-weight-medium text-wrap">#{{ item.id }} - {{ item.name }}</span>
                                     </div>
 
                                     <div class="text-right flex-shrink-0">
