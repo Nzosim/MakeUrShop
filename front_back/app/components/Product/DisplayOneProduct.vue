@@ -3,7 +3,7 @@
         <div class="product-image-container">
             <img :src="product.url" :alt="product.name" class="product-image" />
             <p v-if="!isStock" class="soldout">Rupture de stock</p>
-            <p v-if="isSolde" class="soldout">Solde</p>
+            <p v-if="isStock && isSolde" class="soldout">Réduction</p>
         </div>
         <div class="product-info pa-4">
             <h4 class="product-name mb-2">{{ product.name }}</h4>

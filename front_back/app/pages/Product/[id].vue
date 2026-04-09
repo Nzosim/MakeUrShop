@@ -1,9 +1,15 @@
 <template>
-    <div class="product-list-container d-flex mt-5">
-        <div class="filter-section">
+    <div class="product-list-container mt-5">
+        <div class="px-4 mb-2 filter-btn">
+            <v-btn size="large" color="primary" prepend-icon="mdi-filter-variant" @click="showFilters = !showFilters">Filtres</v-btn>
+        </div>
+
+        <div v-if="showFilters && !isDesktop" class="filter-backdrop" @click="showFilters = false"></div>
+
+        <div class="filter-section" :class="{ 'mobile-modal': !isDesktop && showFilters }" v-show="showFilters || isDesktop">
             <div class="filter ma-5">
                 <div class="d-flex justify-space-between">
-                    <h3>Filtres</h3>
+                    <h3 class="mt-1"><b>Filtres</b></h3>
                     <div class="text-center">
                         <v-menu v-model="menuOpen" open-on-hover>
                             <template v-slot:activator="{ props }" class="d-flex">
@@ -84,6 +90,8 @@
     const size = ref(null);
     const priceRange = ref([0, 1000]);
     const selectedBrand = ref(null);
+    const showFilters = ref(false);
+    const isDesktop = ref(false);
 
     // Pagination
     const currentPage = ref(1);
@@ -163,6 +171,13 @@
         return pages;
     });
 
+    onMounted(() => {
+        isDesktop.value = window.innerWidth > 940;
+        window.addEventListener('resize', () => {
+            isDesktop.value = window.innerWidth > 940;
+        });
+    });
+
     // Changement de page
     const goToPage = (page) => {
         if (page >= 1 && page <= totalPages.value) {
@@ -171,3 +186,62 @@
         }
     };
 </script>
+
+<style scoped>
+    .product-list-container {
+        display: block;
+        position: relative;
+    }
+
+    .filter-btn {
+        display: block;
+    }
+
+    .filter-backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.3);
+        z-index: 999;
+    }
+
+    .filter-section.mobile-modal {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 1000;
+        max-height: 80vh;
+        overflow-y: auto;
+        border-radius: 8px;
+        background: white;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        width: 90%;
+        max-width: 500px;
+    }
+
+    @media (min-width: 941px) {
+        .product-list-container {
+            display: flex;
+        }
+
+        .filter-btn {
+            display: none;
+        }
+
+        .filter-backdrop {
+            display: none;
+        }
+
+        .filter-section.mobile-modal {
+            position: static;
+            transform: none;
+            max-height: none;
+            overflow: visible;
+            border-radius: 0;
+            background: transparent;
+            box-shadow: none;
+            width: auto;
+            max-width: none;
+        }
+    }
+</style>
