@@ -5,5 +5,5 @@
 </template>
 
 <script setup>
-    import TextEditor from '@/components/Main/TextEditor.vue';
+    import TextEditor from '@/components/Main/TextEditorGlobal.vue';
 </script>

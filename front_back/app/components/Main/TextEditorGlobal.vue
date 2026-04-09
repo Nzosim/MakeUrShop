@@ -27,25 +27,25 @@
                         kind: 'heading',
                         level: 1,
                         icon: 'i-lucide-heading-1',
-                        label: 'Heading 1',
+                        label: 'Titre 1',
                     },
                     {
                         kind: 'heading',
                         level: 2,
                         icon: 'i-lucide-heading-2',
-                        label: 'Heading 2',
+                        label: 'Titre 2',
                     },
                     {
                         kind: 'heading',
                         level: 3,
                         icon: 'i-lucide-heading-3',
-                        label: 'Heading 3',
+                        label: 'Titre 3',
                     },
                     {
                         kind: 'heading',
                         level: 4,
                         icon: 'i-lucide-heading-4',
-                        label: 'Heading 4',
+                        label: 'Titre 4',
                     },
                 ],
             },
@@ -88,66 +88,66 @@
         [
             {
                 type: 'label',
-                label: 'Text',
+                label: 'Texte',
             },
             {
                 kind: 'paragraph',
-                label: 'Paragraph',
+                label: 'Paragraphe',
                 icon: 'i-lucide-type',
             },
             {
                 kind: 'heading',
                 level: 1,
-                label: 'Heading 1',
+                label: 'Titre 1',
                 icon: 'i-lucide-heading-1',
             },
             {
                 kind: 'heading',
                 level: 2,
-                label: 'Heading 2',
+                label: 'Titre 2',
                 icon: 'i-lucide-heading-2',
             },
             {
                 kind: 'heading',
                 level: 3,
-                label: 'Heading 3',
+                label: 'Titre 3',
                 icon: 'i-lucide-heading-3',
             },
         ],
         [
             {
                 type: 'label',
-                label: 'Lists',
+                label: 'Liste',
             },
             {
                 kind: 'bulletList',
-                label: 'Bullet List',
+                label: 'Liste à puces',
                 icon: 'i-lucide-list',
             },
             {
                 kind: 'orderedList',
-                label: 'Numbered List',
+                label: 'Liste numérotée',
                 icon: 'i-lucide-list-ordered',
             },
         ],
         [
             {
                 type: 'label',
-                label: 'Insert',
+                label: 'Insérer',
             },
             {
                 kind: 'blockquote',
-                label: 'Blockquote',
+                label: 'Citation',
                 icon: 'i-lucide-text-quote',
             },
             {
                 kind: 'codeBlock',
-                label: 'Code Block',
+                label: 'Code',
                 icon: 'i-lucide-square-code',
             },
             {
                 kind: 'horizontalRule',
-                label: 'Divider',
+                label: 'Séparateur',
                 icon: 'i-lucide-separator-horizontal',
             },
         ],
@@ -191,32 +191,59 @@
 </script>
 
 <template>
-    <div class="flex flex-col gap-6 p-6">
-        <v-card class="p-6 shadow-lg rounded-xl bg-white/5 border border-gray-700">
-            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
-                <div class="flex flex-col md:flex-row md:items-center gap-4">
-                    <label class="font-medium ml-4 mt-4">Fichier à modifier :</label>
-                    <select v-model="selectedFile" class="border rounded-lg p-2 bg-white text-gray-800 min-w-[200px] mt-4">
-                        <option disabled value="">-- Sélectionnez un fichier --</option>
-                        <option v-for="f in allowedFiles" :key="f" :value="f">{{ f }}</option>
-                    </select>
+    <div class="pa-6">
+        <v-sheet elevation="2" rounded="xl" class="mb-6 pa-4 d-flex align-center justify-space-between border-thin" color="surface">
+            <div class="d-flex align-center flex-grow-1 ml-6">
+                <div style="flex-basis: 300px">
+                    <div class="text-caption font-weight-bold text-uppercase opacity-60 mb-1">Fichier à modifier</div>
+                    <v-select v-model="selectedFile" :items="allowedFiles" density="compact" variant="outlined" hide-details placeholder="Sélectionnez un fichier"></v-select>
                 </div>
-
-                <v-btn @click="saveFile" class="bg-primary text-white border border-gray-700 rounded-lg px-6 py-2 shadow-md hover:brightness-110 mt-4 mr-4">Sauvegarder</v-btn>
             </div>
 
-            <div class="w-full">
+            <v-btn @click="saveFile" color="primary" elevation="2" class="rounded-lg categories mr-6">Sauvegarder</v-btn>
+        </v-sheet>
+
+        <!-- ZONE D'ÉDITION -->
+        <v-card elevation="2" rounded="xl" border="thin" color="surface">
+            <div class="pa-2">
                 <UEditor
                     v-slot="{ editor }"
                     v-model="value"
                     content-type="markdown"
                     :placeholder="isLoading ? 'Chargement...' : 'Appuyer sur / pour voir les commandes...'"
-                    class="ue-editor w-full min-h-[500px] bg-secondary text-white border border-gray-700 rounded-lg p-6"
+                    class="ue-editor w-full min-h-[600px] pa-6"
                 >
-                    <UEditorToolbar :editor="editor" :items="toolbarItems" layout="bubble" class="bg-secondary text-white border border-gray-700 shadow-md rounded-md mb-4" />
-                    <UEditorSuggestionMenu :editor="editor" :items="suggestionItems" :append-to="appendToBody" class="bg-secondary text-white border border-gray-700 rounded-md" />
+                    <UEditorToolbar :editor="editor" :items="toolbarItems" layout="bubble" class="bg-secondary text-white shadow-lg rounded-pill mb-4" />
+                    <UEditorSuggestionMenu :editor="editor" :items="suggestionItems" :append-to="appendToBody" class="bg-secondary text-white rounded-lg" />
                 </UEditor>
             </div>
         </v-card>
     </div>
 </template>
+
+<style scoped>
+    /* 1. On force l'éditeur à utiliser la couleur de texte du thème Vuetify */
+    :deep(.ue-editor) {
+        color: inherit;
+    }
+
+    /* 2. Les titres et séparateurs suivent automatiquement la couleur du texte */
+    :deep(.ue-editor h1),
+    :deep(.ue-editor h2),
+    :deep(.ue-editor h3),
+    :deep(.ue-editor h4),
+    :deep(.ue-editor hr) {
+        /* currentColor prend la couleur du texte (blanc en dark, noir en light) */
+        color: currentColor !important;
+        border-color: currentColor;
+        opacity: 0.9; /* Optionnel : un poil moins agressif que le blanc pur */
+    }
+
+    /* 3. Style spécifique pour le séparateur (hr) */
+    :deep(.ue-editor hr) {
+        border: 0;
+        border-top: 1px solid currentColor;
+        margin: 2em 0;
+        opacity: 0.2; /* Très discret pour ne pas alourdir le design */
+    }
+</style>
