@@ -10,7 +10,7 @@
             <v-list-item prepend-icon="mdi-cart" title="Commandes" value="prout2" href="/dashboard/order"></v-list-item>
             <v-list-group value="gestion">
                 <template #activator="{ props }">
-                    <v-list-item v-bind="props" prepend-icon="mdi-reproduction" title="Gestion"></v-list-item>
+                    <v-list-item v-bind="props" prepend-icon="mdi-tag" title="Gestion"></v-list-item>
                 </template>
 
                 <v-list-item prepend-icon="mdi-package-variant" title="Stockage" value="articles" href="/dashboard/article"></v-list-item>
