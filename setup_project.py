@@ -20,6 +20,7 @@ image_accueil_1 = dossier_app / "app" / "contents" / "index" / "visual_index_1.p
 image_accueil_2 = dossier_app / "app" / "contents" / "index" / "visual_index_2.png"
 image_about = dossier_app / "app" / "contents" / "about" / "timeline.png"
 env = racine / ".env"
+fichier_init_categories = racine / "db" / "init" / "init_categories.sql"
 
 # Cherche une info dans le fichier markdown avec une regex
 def chercher_md(pattern, texte, defaut=""):
@@ -748,19 +749,135 @@ def configurer_env():
     env.write_text(nouveau_contenu, encoding="utf-8")
     print(".env configuré et sauvegardé")
 
+def configurer_bdd_categories():
+    print("\nConfiguration des sous-catégories pour les catégories déjà définies dans config.json")
+
+    # Créer le dossier db/init si il n'existe pas
+    fichier_init_categories.parent.mkdir(parents=True, exist_ok=True)
+
+    # Lire les catégories de config.json
+    ancienne_config, texte_config = lire_ancienne_config()
+    navbar_config = ancienne_config.get("config", {}).get("navBar", {})
+    categories = navbar_config.get("names") or categories_config(texte_config)
+
+    if not categories:
+        raise RuntimeError("Pas de catégories trouvées dans config.json. Configuration les catégories d'abord avec configurer_config_json().")
+
+    print(f"Catégories trouvées dans config.json : {categories}")
+
+    # Si le fichier n'existe pas, on le crée avec le CREATE TABLE + INSERT
+    if not fichier_init_categories.exists():
+        contenu_actuel = (
+            "-- Categories et sous-catégories\n"
+            "\n"
+            "DROP TABLE IF EXISTS `category`;\n"
+            "CREATE TABLE `category` (\n"
+            "  `id` int NOT NULL AUTO_INCREMENT,\n"
+            "  `name` varchar(150) NOT NULL,\n"
+            "  `category_parent_id` int DEFAULT NULL,\n"
+            "  PRIMARY KEY (`id`),\n"
+            "  KEY `category_parent_id` (`category_parent_id`),\n"
+            "  CONSTRAINT `category_ibfk_1` FOREIGN KEY (`category_parent_id`) REFERENCES `category` (`id`)\n"
+            ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;\n"
+            "\n"
+            "INSERT INTO `category` (`id`, `name`, `category_parent_id`) VALUES\n"
+        )
+        fichier_init_categories.write_text(contenu_actuel, encoding="utf-8")
+    else:
+        contenu_actuel = fichier_init_categories.read_text(encoding="utf-8")
+
+    # 1. Pour chaque catégorie (déjà dans config.json), demander le nombre de sous-catégories et leurs noms
+    categories_parentes = []
+    for nom_cat in categories:
+        categories_parentes.append({"nom": nom_cat, "sous_categories": []})
+
+        nombre_sous = demander_nombre(f"Nombre de sous-catégories pour '{nom_cat}'", 2)
+
+        for j in range(nombre_sous):
+            defaut = f"Sous-catégorie {j + 1}"
+            nom_sous = demander(f"Nom de la sous-catégorie {j + 1} pour '{nom_cat}'", defaut)
+            categories_parentes[-1]["sous_categories"].append(nom_sous)
+
+    # 2. Trouver la partie INSERT INTO `category` ... jusqu'à le ";" final
+    match_insert_category = re.search(
+        r"(INSERT INTO `category` \(`id`, `name`, `category_parent_id`\) VALUES\n)(.*?)(;)\n",
+        contenu_actuel,
+        re.MULTILINE | re.DOTALL
+    )
+
+    if match_insert_category:
+        debut_insert = match_insert_category.group(1)
+        position_depart_bloc = match_insert_category.start()
+        position_fin_bloc = match_insert_category.end()
+
+        partie_avant = contenu_actuel[:position_depart_bloc]
+        partie_apres = contenu_actuel[position_fin_bloc:]
+    else:
+        debut_insert = ""
+        partie_avant = (
+            "-- Categories et sous-catégories\n"
+            "\n"
+            "DROP TABLE IF EXISTS `category`;\n"
+            "CREATE TABLE `category` (\n"
+            "  `id` int NOT NULL AUTO_INCREMENT,\n"
+            "  `name` varchar(150) NOT NULL,\n"
+            "  `category_parent_id` int DEFAULT NULL,\n"
+            "  PRIMARY KEY (`id`),\n"
+            "  KEY `category_parent_id` (`category_parent_id`),\n"
+            "  CONSTRAINT `category_ibfk_1` FOREIGN KEY (`category_parent_id`) REFERENCES `category` (`id`)\n"
+            ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;\n"
+            "\n"
+            "INSERT INTO `category` (`id`, `name`, `category_parent_id`) VALUES\n"
+        )
+        partie_apres = ""
+
+    # 3. Générer les nouvelles INSERT pour `category`
+    insert_lines = []
+    id_counter = 1
+
+    # Catégories parentes (category_parent_id = NULL)
+    for cat in categories_parentes:
+        line = f"({id_counter}, '{cat['nom']}', NULL)"
+        insert_lines.append(line)
+        id_counter += 1
+
+    # Sous-catégories (avec category_parent_id)
+    for i, cat in enumerate(categories_parentes):
+        parent_id = i + 1
+        for sous in cat["sous_categories"]:
+            line = f"({id_counter}, '{sous}', {parent_id})"
+            insert_lines.append(line)
+            id_counter += 1
+
+    # Mettre des commas à la fin de chaque ligne sauf la dernière
+    for i in range(len(insert_lines)):
+        if i < len(insert_lines) - 1:
+            insert_lines[i] += ","
+
+    nouvelles_insert = debut_insert + "\n".join(insert_lines) + "\n;"
+
+    # 4. Reconstruire le fichier complet (CORRECTION : utiliser partie_avant)
+    nouveau_contenu = partie_avant + nouvelles_insert + partie_apres
+
+    # 5. Écrire dans le fichier
+    fichier_init_categories.write_text(nouveau_contenu, encoding="utf-8")
+
+    print(f"Fichier d'initialisation des catégories modifié : {fichier_init_categories}")
+    
 
 def main():
     try:
         # Configuration du projet
         configurer_env()
-        # configurer_mentions_legales()
-        # configurer_cgv()
-        # configurer_description_marque()
-        # configurer_histoire_marque()
-        # configurer_politique_confidentialite()
-        # configurer_config_json()
-        # configurer_images()
-        # installer_dependances()
+        configurer_mentions_legales()
+        configurer_cgv()
+        configurer_description_marque()
+        configurer_histoire_marque()
+        configurer_politique_confidentialite()
+        configurer_config_json()
+        configurer_images()
+        installer_dependances()
+        configurer_bdd_categories()
     except subprocess.CalledProcessError as erreur:
         print(f"Erreur pendant npm install ({erreur.returncode})", file=sys.stderr)
         return erreur.returncode
