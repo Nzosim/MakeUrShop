@@ -18,36 +18,59 @@
         <h1 class="mb-6">Panier</h1>
 
         <div v-if="cartItems.length">
-            <v-table>
-                <thead>
-                    <tr>
-                        <th>Article</th>
-                        <th class="text-center">Taille</th>
-                        <th class="text-center">Quantité</th>
-                        <th class="text-right">Prix</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="(item, index) in cartItems" :key="index">
-                        <td>
-                            <div class="d-flex align-center ga-3 mt-1 mb-1">
-                                <v-icon class="bin" size="25" color="red" @click="removeItem(item)">mdi-delete-circle</v-icon>
-                                <img :src="item.image" :alt="item.name" style="width: 60px; height: 60px; object-fit: cover; border-radius: 4px" />
-                                <div>
-                                    <p class="font-weight-medium">{{ item.name }}</p>
+            <div class="cart-table">
+                <v-table>
+                    <thead>
+                        <tr>
+                            <th>Article</th>
+                            <th class="text-center">Taille</th>
+                            <th class="text-center">Quantité</th>
+                            <th class="text-right">Prix</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(item, index) in cartItems" :key="index">
+                            <td>
+                                <div class="d-flex align-center ga-3 mt-1 mb-1">
+                                    <v-icon class="bin" size="25" color="red" @click="removeItem(item)">mdi-delete-circle</v-icon>
+                                    <img :src="item.image" :alt="item.name" style="width: 60px; height: 60px; object-fit: cover; border-radius: 4px" />
+                                    <div>
+                                        <p class="font-weight-medium">{{ item.name }}</p>
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                        <td class="text-center">{{ item.size }}</td>
-                        <td class="text-center">
-                            <v-icon class="bin" size="25" color="grey" @click="decreaseQuantity(item)">mdi-minus-circle</v-icon>
-                            {{ item.quantity }}
-                            <v-icon class="bin" size="25" color="grey" @click="increaseQuantity(item)">mdi-plus-circle</v-icon>
-                        </td>
-                        <td class="text-right">{{ item.price }} €</td>
-                    </tr>
-                </tbody>
-            </v-table>
+                            </td>
+                            <td class="text-center">{{ item.size }}</td>
+                            <td class="text-center">
+                                <v-icon class="bin" size="25" color="grey" @click="decreaseQuantity(item)">mdi-minus-circle</v-icon>
+                                {{ item.quantity }}
+                                <v-icon class="bin" size="25" color="grey" @click="increaseQuantity(item)">mdi-plus-circle</v-icon>
+                            </td>
+                            <td class="text-right">{{ item.price }} €</td>
+                        </tr>
+                    </tbody>
+                </v-table>
+            </div>
+
+            <div class="cart-mobile">
+                <div v-for="(item, index) in cartItems" :key="index" class="cart-card">
+                    <div class="d-flex justify-space-between align-start mb-2">
+                        <img :src="item.image" :alt="item.name" style="width: 80px; height: 80px; object-fit: cover; border-radius: 4px" />
+                        <v-icon class="bin" size="25" color="red" @click="removeItem(item)">mdi-delete-circle</v-icon>
+                    </div>
+                    <p class="font-weight-medium mb-1">{{ item.name }}</p>
+                    <div class="mb-2">
+                        <p class="text-caption text-grey">Taille: {{ item.size }}</p>
+                    </div>
+                    <div class="d-flex justify-space-between align-center">
+                        <div class="d-flex align-center ga-1">
+                            <v-icon class="bin" size="22" color="grey" @click="decreaseQuantity(item)">mdi-minus-circle</v-icon>
+                            <span>{{ item.quantity }}</span>
+                            <v-icon class="bin" size="22" color="grey" @click="increaseQuantity(item)">mdi-plus-circle</v-icon>
+                        </div>
+                        <p class="font-weight-bold">{{ (item.price * item.quantity).toFixed(2) }} €</p>
+                    </div>
+                </div>
+            </div>
 
             <div class="d-flex justify-end mt-4" style="gap: 2rem; align-items: center">
                 <p class="text-h6">Total : {{ total }} €</p>
@@ -155,3 +178,36 @@
         }
     };
 </script>
+
+<style scoped>
+    .cart-table {
+        display: block;
+    }
+
+    .cart-mobile {
+        display: none;
+    }
+
+    @media (max-width: 768px) {
+        .cart-table {
+            display: none;
+        }
+
+        .cart-mobile {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 16px;
+        }
+
+        .cart-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 12px;
+            background: #fafafa;
+        }
+
+        .bin {
+            cursor: pointer;
+        }
+    }
+</style>

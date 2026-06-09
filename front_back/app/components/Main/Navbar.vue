@@ -12,7 +12,7 @@
             <v-app-bar-nav-icon class="d-md-none mr-2" @click="drawer = !drawer" />
 
             <v-btn text to="/" ripple="false" class="pa-0">
-                <img src="/assets/img/small_logo_makeurshop.png" class="icons" height="40" alt="Logo" />
+                <img src="/assets/img/small_logo_makeurshop.png" class="icons" style="height: 40px" alt="Logo" />
             </v-btn>
         </div>
 

@@ -1,14 +1,14 @@
 <template>
     <v-container>
-        <v-carousel show-arrows="hover">
+        <v-carousel show-arrows="hover" rounded="xl">
             <v-carousel-item src="/contents/index/visual_index_1.png" cover></v-carousel-item>
             <v-carousel-item src="/contents/index/visual_index_2.png" cover></v-carousel-item>
         </v-carousel>
     </v-container>
-    <v-container>
+    <!-- <v-container>
         <h2 class="my-12">LES PLUS VENDUS ⤶</h2>
         <br />
-    </v-container>
+    </v-container> -->
     <v-container>
         <h2 class="my-12">⤷ NOTRE MARQUE</h2>
         <v-row>
