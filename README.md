@@ -21,3 +21,17 @@ localhost:8080
 > Les crédentials sont dans le fichier .env
 
 Le fichier `db/init.sql` contient l'initialisation de la base données de devs
+
+# Configuration du projet
+
+```
+Création d'un compte Stripe
+```
+
+```
+Création d'un compte email
+```
+
+```
+python setup_project.py
+```

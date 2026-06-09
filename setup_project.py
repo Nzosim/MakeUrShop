@@ -19,7 +19,7 @@ image_logo = dossier_app / "app" / "assets" / "img" / "small_logo_makeurshop.png
 image_accueil_1 = dossier_app / "app" / "contents" / "index" / "visual_index_1.png"
 image_accueil_2 = dossier_app / "app" / "contents" / "index" / "visual_index_2.png"
 image_about = dossier_app / "app" / "contents" / "about" / "timeline.png"
-
+env = racine / ".env"
 
 # Cherche une info dans le fichier markdown avec une regex
 def chercher_md(pattern, texte, defaut=""):
@@ -688,18 +688,79 @@ def installer_dependances():
     subprocess.run(["npm", "install"], cwd=dossier_app, check=True)
     print("Installation npm terminée")
 
+def configurer_env():
+    # Clés de base pour un site type e‑commerce Nuxt / backend
+    cles = [
+        "DB_HOST",
+        "DB_USER",
+        "DB_PASSWORD",
+        "DB_NAME",
+        "MAIL_USER",
+        "MAIL_PASS",
+    ]
+
+    # Valeurs par défaut
+    defauts = {
+        "DB_HOST": "db",
+        "DB_USER": "root",
+        "DB_PASSWORD": "root",
+        "DB_NAME": "makeurshop",
+        "MAIL_USER": "makeurshop.projet4a@gmail.com",
+        "MAIL_PASS": "naebjbxchcnkdmef",
+    }
+
+    # Lecture du fichier .env actuel
+    if not env.exists():
+        # Si le fichier n’existe pas, on part sur les défauts
+        valeurs = defauts.copy()
+    else:
+        contenu = env.read_text(encoding="utf-8")
+        valeurs = {}
+        for cle in cles:
+            defaut = defauts[cle]
+            # On cherche `CLE=value` ou `CLE="value"`
+            resultat = re.search(
+                rf"^{cle}\s*=\s*[\"']*([^\"'\n]+)[\"']*",
+                contenu,
+                re.MULTILINE
+            )
+            if resultat:
+                valeurs[cle] = resultat.group(1)
+            else:
+                valeurs[cle] = defaut
+
+    print("\nConfiguration du fichier .env")
+
+    # On demande les valeurs à l’utilisateur
+    for cle in cles:
+        defaut = valeurs[cle]
+        reponse = input(f"{cle} [{defaut}] : ").strip()
+        if reponse != "":
+            valeurs[cle] = reponse
+
+    # Génération du nouveau contenu
+    lignes = []
+    for cle in cles:
+        val = valeurs[cle]
+        lignes.append(f'{cle}={val}')
+
+    nouveau_contenu = "\n".join(lignes) + "\n"
+    env.write_text(nouveau_contenu, encoding="utf-8")
+    print(".env configuré et sauvegardé")
+
 
 def main():
     try:
         # Configuration du projet
-        configurer_mentions_legales()
-        configurer_cgv()
-        configurer_description_marque()
-        configurer_histoire_marque()
-        configurer_politique_confidentialite()
-        configurer_config_json()
-        configurer_images()
-        installer_dependances()
+        configurer_env()
+        # configurer_mentions_legales()
+        # configurer_cgv()
+        # configurer_description_marque()
+        # configurer_histoire_marque()
+        # configurer_politique_confidentialite()
+        # configurer_config_json()
+        # configurer_images()
+        # installer_dependances()
     except subprocess.CalledProcessError as erreur:
         print(f"Erreur pendant npm install ({erreur.returncode})", file=sys.stderr)
         return erreur.returncode

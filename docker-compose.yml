@@ -10,12 +10,12 @@ services:
         command: sh -c "npm install && npm run dev"
         environment:
             - NODE_ENV=development
-            - DB_HOST=db
+            - DB_HOST=${DB_HOST}
             - CHOKIDAR_USEPOLLING=true
             - WATCHPACK_POLLING=true
-            - DB_USER=root
-            - DB_PASSWORD=root
-            - DB_NAME=makeurshop
+            - DB_USER=${DB_USER}
+            - DB_PASSWORD=${DB_PASSWORD}
+            - DB_NAME=${DB_NAME}
             - MAIL_USER=${MAIL_USER}
             - MAIL_PASS=${MAIL_PASS}
         depends_on:
@@ -27,8 +27,8 @@ services:
         container_name: mysql_db
         restart: always
         environment:
-            MYSQL_ROOT_PASSWORD: root
-            MYSQL_DATABASE: makeurshop
+            MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+            MYSQL_DATABASE: ${DB_NAME}
         volumes:
             - mysql_data:/var/lib/mysql
             - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
