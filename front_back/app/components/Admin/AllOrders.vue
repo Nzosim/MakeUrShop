@@ -1,6 +1,6 @@
 <template>
     <v-card class="mt-5 ml-5 mr-5 pa-6" rounded="lg">
-        <div class="d-flex justify-space-between align-center mb-6">
+        <div class="d-flex justify-space-between align-center mb-6 order-header">
             <div>
                 <h2 class="text-h5 text-accent font-weight-bold mb-1">Gestion des commandes</h2>
                 <p class="text-caption text-medium-emphasis mb-0">Affichage admin des commandes clients</p>
@@ -47,7 +47,7 @@
                 <v-alert v-if="order.statut === 'annulee'" type="error" variant="tonal" class="mb-4">Cette commande a ete annulee.</v-alert>
 
                 <v-stepper v-else :model-value="getStatusStep(order.statut)" hide-actions flat class="mb-4 rounded bg-grey-lighten-5">
-                    <v-stepper-header>
+                    <v-stepper-header class="stepper">
                         <v-stepper-item :value="1" title="En attente"></v-stepper-item>
                         <v-divider></v-divider>
                         <v-stepper-item :value="2" title="Payee"></v-stepper-item>
@@ -461,5 +461,15 @@
     .rotate-90 {
         transform: rotate(90deg);
         transition: transform 0.2s;
+    }
+
+    @media (max-width: 1050px) {
+        .order-header {
+            flex-direction: column;
+            gap: 16px;
+        }
+        .stepper {
+            flex-direction: column;
+        }
     }
 </style>

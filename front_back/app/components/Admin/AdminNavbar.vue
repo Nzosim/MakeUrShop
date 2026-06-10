@@ -1,6 +1,11 @@
 <template>
-    <v-navigation-drawer permanent>
-        <v-list>
+    <v-app-bar v-if="!isDesktop" class="d-md-none" flat>
+        <v-app-bar-nav-icon @click="mobileDrawer = !mobileDrawer"></v-app-bar-nav-icon>
+        <v-toolbar-title class="logo-text">Dashboard</v-toolbar-title>
+    </v-app-bar>
+
+    <v-navigation-drawer v-model="drawerState" :permanent="isDesktop" :temporary="!isDesktop">
+        <v-list class="d-none d-md-block">
             <v-list-item class="d-flex justify-center">
                 <div class="logo-text">Dashboard</div>
             </v-list-item>
@@ -35,9 +40,27 @@
     </v-navigation-drawer>
 </template>
 
-<style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap');
+<script setup>
+    import { ref, computed } from 'vue';
+    import { useDisplay } from 'vuetify';
 
+    const { mdAndUp } = useDisplay();
+    const isDesktop = computed(() => mdAndUp.value);
+    const mobileDrawer = ref(false);
+
+    const drawerState = computed({
+        get() {
+            return isDesktop.value ? true : mobileDrawer.value;
+        },
+        set(val) {
+            if (!isDesktop.value) {
+                mobileDrawer.value = val;
+            }
+        },
+    });
+</script>
+
+<style>
     .logo-text {
         font-family: 'Poppins', sans-serif;
         font-size: 24px;
