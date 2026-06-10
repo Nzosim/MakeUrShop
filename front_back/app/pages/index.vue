@@ -1,8 +1,8 @@
 <template>
     <v-container>
         <v-carousel show-arrows="hover" rounded="xl">
-            <v-carousel-item src="/contents/index/visual_index_1.png" cover></v-carousel-item>
-            <v-carousel-item src="/contents/index/visual_index_2.png" cover></v-carousel-item>
+            <v-carousel-item src="/contents/index/visual_index_1.png"></v-carousel-item>
+            <v-carousel-item src="/contents/index/visual_index_2.png"></v-carousel-item>
         </v-carousel>
     </v-container>
     <!-- <v-container>
