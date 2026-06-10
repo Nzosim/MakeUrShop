@@ -6,6 +6,19 @@
                 <p class="text-caption text-medium-emphasis mb-0">Affichage admin des commandes clients</p>
             </div>
 
+            <div class="d-flex align-right" style="gap: 12px; min-width: 200px">
+                <v-select
+                    v-model="displaySort"
+                    :items="displayOptions"
+                    item-title="title"
+                    item-value="value"
+                    :return-object="false"
+                    label="Afficher"
+                    variant="outlined"
+                    density="compact"
+                    hide-details
+                />
+            </div>
             <div class="d-flex align-center" style="gap: 12px; min-width: 320px">
                 <v-select
                     v-model="selectedSort"
@@ -107,6 +120,7 @@
     const updatingOrderId = ref(null);
     const generatedOrderId = ref(null);
     const selectedSort = ref('status_date');
+    const displaySort = ref('all_display');
     const storeInfo = appConfig?.config?.info || {};
     const shipperName = storeInfo.storeName || 'MakeUrStore';
     const shipperAddress = storeInfo.storeAddress || 'Adresse expéditeur non configurée';
@@ -123,7 +137,33 @@
         { title: 'Numéro de commande (croissant)', value: 'id_asc' },
     ];
 
+    const displayOptions = [
+        { title: 'Tous', value: 'all_display' },
+        { title: 'En attente', value: 'wait_status' },
+        { title: 'Payee', value: 'paid_desc' },
+        { title: 'Expediee', value: 'exp_asc' },
+        { title: 'Livree', value: 'liv_desc' },
+    ];
+
     const sortedOrders = computed(() => {
+        // FILTRE
+        const filterKey = typeof displaySort.value === 'string' ? displaySort.value : displaySort.value?.value || 'all_display';
+
+        let filtered = [...orders.value];
+
+        if (filterKey !== 'all_display') {
+            const filterMapping = {
+                wait_status: 'en_attente',
+                paid_desc: 'payee',
+                exp_asc: 'expediee',
+                liv_desc: 'livree',
+            };
+
+            const targetStatus = filterMapping[filterKey];
+            filtered = filtered.filter((order) => order.statut === targetStatus);
+        }
+
+        // TRI
         const statusOrder = {
             en_attente: 1,
             payee: 2,
@@ -134,7 +174,7 @@
 
         const sortKey = typeof selectedSort.value === 'string' ? selectedSort.value : selectedSort.value?.value || 'status_date';
 
-        return [...orders.value].sort((a, b) => {
+        return filtered.sort((a, b) => {
             const stepA = statusOrder[a.statut] || 999;
             const stepB = statusOrder[b.statut] || 999;
 
