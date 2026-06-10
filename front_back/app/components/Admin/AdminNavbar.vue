@@ -21,19 +21,6 @@
             <v-list-item prepend-icon="mdi-face-man-profile" title="Clients" value="shared" href="/dashboard/accounts"></v-list-item>
             <v-list-item prepend-icon="mdi-text-shadow" title="Configuration" value="starred" href="/dashboard/configuration"></v-list-item>
         </v-list>
-
-        <v-list style="position: absolute; bottom: 10px; width: 100%">
-            <v-divider class="mb-2"></v-divider>
-            <v-list-item
-                prepend-avatar="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQN0p9Jer0iBCVzxQGUsNyXAgk_osWJU8arSw&s"
-                subtitle="Administrateur"
-                title="Enzo Simonin"
-            >
-                <template #append>
-                    <v-btn icon="mdi-home" size="small" variant="text" href="/" />
-                </template>
-            </v-list-item>
-        </v-list>
     </v-navigation-drawer>
 </template>
 
