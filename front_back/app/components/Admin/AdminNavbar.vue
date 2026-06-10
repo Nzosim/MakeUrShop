@@ -21,6 +21,15 @@
             <v-list-item prepend-icon="mdi-face-man-profile" title="Clients" value="shared" href="/dashboard/accounts"></v-list-item>
             <v-list-item prepend-icon="mdi-text-shadow" title="Configuration" value="starred" href="/dashboard/configuration"></v-list-item>
         </v-list>
+
+        <v-list style="position: absolute; bottom: 0px; width: 100%">
+            <v-divider class="mb-2"></v-divider>
+            <v-list-item title="Administrateur">
+                <template #append>
+                    <v-btn icon="mdi-home" size="small" variant="text" href="/" />
+                </template>
+            </v-list-item>
+        </v-list>
     </v-navigation-drawer>
 </template>
 
