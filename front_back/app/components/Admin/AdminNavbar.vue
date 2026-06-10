@@ -13,8 +13,8 @@
                     <v-list-item v-bind="props" prepend-icon="mdi-tag" title="Gestion"></v-list-item>
                 </template>
 
-                <v-list-item prepend-icon="mdi-package-variant" title="Stockage" value="articles" href="/dashboard/article"></v-list-item>
-                <v-list-item prepend-icon="mdi-tag" title="Marques" value="marques" href="/dashboard/brands"></v-list-item>
+                <v-list-item prepend-icon="mdi-package-variant" title="Stockage" value="articles" href="/dashboard/stockage"></v-list-item>
+                <v-list-item prepend-icon="mdi-tag" title="Marques" value="marques" href="/dashboard/marque"></v-list-item>
                 <v-list-item prepend-icon="mdi-shape" title="Catégories" value="categories" href="/dashboard/categories"></v-list-item>
             </v-list-group>
 
