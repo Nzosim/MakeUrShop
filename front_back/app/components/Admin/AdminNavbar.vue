@@ -18,7 +18,7 @@
                 <v-list-item prepend-icon="mdi-shape" title="Catégories" value="categories" href="/dashboard/categories"></v-list-item>
             </v-list-group>
 
-            <v-list-item prepend-icon="mdi-face-man-profile" title="Clients" value="shared" href="/dashboard/accounts"></v-list-item>
+            <v-list-item prepend-icon="mdi-account-group" title="Clients" value="shared" href="/dashboard/accounts"></v-list-item>
             <v-list-item prepend-icon="mdi-text-shadow" title="Configuration" value="starred" href="/dashboard/configuration"></v-list-item>
         </v-list>
 
