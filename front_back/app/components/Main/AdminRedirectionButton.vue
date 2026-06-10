@@ -1,5 +1,5 @@
 <template>
-    <v-fab @click="navigateTo('/dashboard/main')" color="primary" class="adminRedirectionButton" icon="mdi-shield-crown"></v-fab>
+    <v-fab @click="navigateTo('/dashboard/Stats')" color="primary" class="adminRedirectionButton" icon="mdi-shield-crown"></v-fab>
 </template>
 
 <style scoped>
