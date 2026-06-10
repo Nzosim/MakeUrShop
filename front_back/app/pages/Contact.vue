@@ -18,9 +18,7 @@
                             ></iframe>
                         </div>
 
-                        <p class="text-center mt-4 text-body-2">
-                            <h4>{{ storeAddress }}  </h4>
-                        </p>
+                        <h4 class="text-center mt-4">{{ storeAddress }}</h4>
                     </v-card>
                 </v-col>
                 <v-col cols="12" md="4">
