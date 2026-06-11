@@ -11,18 +11,18 @@ CREATE TABLE `category` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 INSERT INTO `category` (`id`, `name`, `category_parent_id`) VALUES
-(1, 'Homme', NULL),
-(2, 'Femme', NULL),
-(3, 'Enfant', NULL),
-(4, 'qzdqzd', 1),
-(5, 'qe', 2),
-(6, 'qdz', 2),
-(7, 'z', 2),
-(8, 'dz', 2),
-(9, 'dz', 2),
-(10, 'z', 2),
-(11, 'z', 2),
-(12, 'z', 2),
-(13, 'dzqdz', 2),
-(14, 'zdqz', 2)
-;
+(1,	'Homme',	NULL),
+(2,	'Femme',	NULL),
+(3,	'Enfant',	NULL),
+(4,	'T-shirts',	1),
+(5,	'Pantalons',	1),
+(6,	'Vestes',	1),
+(7,	'Chaussures',	1),
+(8,	'Robes',	2),
+(9,	'Tops',	2),
+(10,	'Jupes',	2),
+(11,	'Chaussures',	2),
+(12,	'T-shirts',	3),
+(13,	'Pantalons',	3),
+(14,	'Vestes',	3),
+(15,	'Chaussures',	3);
