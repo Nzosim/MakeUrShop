@@ -13,35 +13,53 @@
 
             <v-col cols="5" class="px-3 py-1">
                 <div class="d-flex align-center ga-1">
-                    <v-btn icon="mdi-minus" size="x-small" variant="outlined" density="compact" :disabled="stock.stock_number <= 0 || stock.saving" @click="adjust(stock, -1)" />
                     <v-text-field
-                        v-model.number="stock.stock_number"
+                        v-model.number="stock.qty"
                         type="number"
                         density="compact"
-                        variant="outlined"
                         hide-details
+                        hide-spin-buttons
                         min="0"
-                        style="width: 70px"
+                        style="width: 80px"
                         :disabled="stock.saving"
-                        :error="!!stock.error"
-                        @update:model-value="scheduleSave(stock)"
-                        @blur="flushSave(stock)"
+                        @keyup.enter="save(stock)"
                     />
-                    <v-btn icon="mdi-plus" size="x-small" variant="outlined" density="compact" :disabled="stock.saving" @click="adjust(stock, +1)" />
+
+                    <div class="d-flex flex-column ga-1 ml-1">
+                        <v-btn icon="mdi-chevron-up" size="x-small" density="compact" :disabled="stock.saving" @click="stock.qty = (Number(stock.qty) || 0) + 1" />
+                        <v-btn
+                            icon="mdi-chevron-down"
+                            size="x-small"
+                            density="compact"
+                            :disabled="stock.qty <= 0 || stock.saving"
+                            @click="stock.qty = Math.max(0, (Number(stock.qty) || 0) - 1)"
+                        />
+                    </div>
+
+                    <v-btn
+                        v-if="isDirty(stock)"
+                        icon="mdi-check"
+                        size="small"
+                        color="success"
+                        variant="flat"
+                        density="comfortable"
+                        class="ml-2"
+                        :loading="stock.saving"
+                        @click="save(stock)"
+                    />
                 </div>
             </v-col>
 
             <v-col cols="4" class="px-3 py-2 d-flex align-center">
-                <v-chip :color="stock.stock_number > 0 ? 'success' : 'error'" size="small" variant="flat">
-                    {{ stock.stock_number > 0 ? 'Disponible' : 'Épuisé' }}
+                <v-chip :color="stock.qty > 0 ? 'success' : 'error'" size="small" variant="flat">
+                    {{ stock.qty > 0 ? 'Disponible' : 'Épuisé' }}
                 </v-chip>
-                <v-progress-circular v-if="stock.saving" indeterminate size="14" width="2" class="ml-2" />
-                <v-tooltip v-else-if="stock.error" :text="stock.error" location="top">
+                <v-icon v-if="stock.saved === stock.qty && !stock.error" color="success" size="16" class="ml-2">mdi-check</v-icon>
+                <v-tooltip v-if="stock.error" :text="stock.error" location="top">
                     <template #activator="{ props: tipProps }">
                         <v-icon v-bind="tipProps" color="error" size="16" class="ml-2">mdi-alert-circle</v-icon>
                     </template>
                 </v-tooltip>
-                <v-icon v-else-if="stock.saved" color="success" size="16" class="ml-2">mdi-check</v-icon>
             </v-col>
         </v-row>
         <v-divider v-if="index < localStocks.length - 1" />
@@ -54,31 +72,21 @@
 
 <script setup>
     const props = defineProps({
-        product: {
-            type: Object,
-            required: true,
-        },
+        product: { type: Object, required: true },
     });
-
-    const DEBOUNCE_MS = 500;
-    const SAVED_INDICATOR_MS = 2000;
 
     const buildLocal = (stocks) =>
         stocks.map((s) => ({
-            ...s,
+            id: s.id,
+            size: s.size,
+            qty: s.stock_number, // valeur affichée / éditable
+            saved: s.stock_number, // dernière valeur confirmée serveur
             saving: false,
-            saved: false,
             error: null,
-            _lastSaved: s.stock_number,
         }));
 
     const localStocks = ref(buildLocal(props.product.stocks));
 
-    // Timers gardés hors de la réactivité
-    const debounceTimers = new Map();
-    const savedTimers = new Map();
-
-    // Resynchronise si le produit change (ex: changement de page)
     watch(
         () => props.product.stocks,
         (newStocks) => {
@@ -86,81 +94,37 @@
         }
     );
 
+    const isDirty = (stock) => Number(stock.qty) !== stock.saved;
+
     const save = async (stock) => {
-        // Annule un éventuel debounce en attente
-        if (debounceTimers.has(stock.id)) {
-            clearTimeout(debounceTimers.get(stock.id));
-            debounceTimers.delete(stock.id);
-        }
+        const value = Number(stock.qty);
 
-        const value = Number(stock.stock_number);
-
-        // Validation
         if (!Number.isInteger(value) || value < 0) {
             stock.error = 'Valeur invalide';
-            stock.stock_number = stock._lastSaved;
+            stock.qty = stock.saved;
             return;
         }
 
-        // Rien à sauvegarder si la valeur est inchangée
-        if (value === stock._lastSaved) return;
+        if (value === stock.saved) return;
 
-        const previous = stock._lastSaved;
         stock.saving = true;
-        stock.saved = false;
         stock.error = null;
 
+        console.log('→ Envoi:', { stock_id: stock.id, stock_number: value });
+
         try {
-            await $fetch('/api/admin/updateStock', {
+            const res = await $fetch('/api/admin/updateStock', {
                 method: 'PUT',
                 body: { stock_id: stock.id, stock_number: value },
             });
-
-            stock._lastSaved = value;
-            stock.saved = true;
-
-            // Reset visuel après quelques secondes
-            if (savedTimers.has(stock.id)) clearTimeout(savedTimers.get(stock.id));
-            savedTimers.set(
-                stock.id,
-                setTimeout(() => {
-                    stock.saved = false;
-                    savedTimers.delete(stock.id);
-                }, SAVED_INDICATOR_MS)
-            );
+            console.log('← Réponse:', res);
+            stock.saved = value;
         } catch (err) {
-            // Rollback sur erreur
-            stock.stock_number = previous;
+            console.error('✗ Erreur:', err);
+            stock.qty = stock.saved;
             stock.error = err?.data?.message || err?.message || 'Erreur de sauvegarde';
         } finally {
             stock.saving = false;
         }
     };
-
-    const scheduleSave = (stock) => {
-        stock.error = null;
-        if (debounceTimers.has(stock.id)) clearTimeout(debounceTimers.get(stock.id));
-        debounceTimers.set(
-            stock.id,
-            setTimeout(() => save(stock), DEBOUNCE_MS)
-        );
-    };
-
-    const flushSave = (stock) => {
-        if (debounceTimers.has(stock.id)) save(stock);
-    };
-
-    const adjust = (stock, delta) => {
-        const next = (stock.stock_number || 0) + delta;
-        if (next < 0) return;
-        stock.stock_number = next;
-        scheduleSave(stock);
-    };
-
-    onBeforeUnmount(() => {
-        debounceTimers.forEach((t) => clearTimeout(t));
-        savedTimers.forEach((t) => clearTimeout(t));
-        debounceTimers.clear();
-        savedTimers.clear();
-    });
 </script>
