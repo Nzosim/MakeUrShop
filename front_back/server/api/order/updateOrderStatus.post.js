@@ -16,7 +16,7 @@ export default defineEventHandler(async (event) => {
         const requestGetStatus = `
             SELECT o.statut, u.email, u.firstname
             FROM orders o
-            INNER JOIN user u ON u.id = o.user_id
+            LEFT JOIN user u ON u.id = o.user_id
             WHERE o.id = ?
         `;
         const [orders] = await db.query(requestGetStatus, [orderId]);
