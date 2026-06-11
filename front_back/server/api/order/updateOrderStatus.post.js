@@ -3,11 +3,11 @@ import { buildOrderStatusMail, sendProjectMail } from '../../utils/mailer.js';
 
 export default defineEventHandler(async (event) => {
     const body = await readBody(event);
-    const { orderId } = body;
+    const { orderId, action } = body;
 
-    if (!orderId) {
+    if (!orderId || !action) {
         setResponseStatus(event, 400);
-        return { error: 'orderId est requis' };
+        return { error: 'orderId et action ("advance", "regress", "cancel") sont requis' };
     }
 
     try {
@@ -30,24 +30,42 @@ export default defineEventHandler(async (event) => {
         const customerEmail = orders[0].email;
         const customerFirstName = orders[0].firstname;
 
-        const statusProgression = {
-            en_attente: 'payee',
-            payee: 'expediee',
-            expediee: 'livree',
-            livree: 'livree',
-            annulee: 'annulee',
+        const statusTransitions = {
+            advance: {
+                en_attente: 'payee',
+                payee: 'expediee',
+                expediee: 'livree',
+            },
+            regress: {
+                payee: 'en_attente',
+                expediee: 'payee',
+                livree: 'expediee',
+            },
         };
 
-        const nextStatus = statusProgression[currentStatus];
+        let nextStatus = null;
 
-        if (!nextStatus) {
+        if (action === 'cancel') {
+            if (currentStatus === 'livree' || currentStatus === 'annulee') {
+                setResponseStatus(event, 400);
+                return { error: "Impossible d'annuler une commande livrée ou déjà annulée." };
+            }
+            nextStatus = 'annulee';
+        } else if (action === 'advance') {
+            nextStatus = statusTransitions.advance[currentStatus];
+            if (!nextStatus) {
+                setResponseStatus(event, 400);
+                return { error: 'Cette commande a déjà atteint le statut final ou ne peut pas avancer.' };
+            }
+        } else if (action === 'regress') {
+            nextStatus = statusTransitions.regress[currentStatus];
+            if (!nextStatus) {
+                setResponseStatus(event, 400);
+                return { error: 'Cette commande est déjà au statut initial ou ne peut pas reculer.' };
+            }
+        } else {
             setResponseStatus(event, 400);
-            return { error: 'Statut actuel invalide' };
-        }
-
-        if (nextStatus === currentStatus) {
-            setResponseStatus(event, 400);
-            return { error: 'Cette commande ne peut pas être mise à jour (statut final atteint)' };
+            return { error: 'Action invalide.' };
         }
 
         // MAJ statut
@@ -68,7 +86,6 @@ export default defineEventHandler(async (event) => {
                         firstName: customerFirstName,
                     }),
                 });
-
                 mailSent = true;
             } catch (mailError) {
                 console.error('Erreur envoi email statut commande:', mailError);
@@ -77,7 +94,7 @@ export default defineEventHandler(async (event) => {
 
         return {
             success: true,
-            message: `Commande passée de ${currentStatus} à ${nextStatus}`,
+            message: `Commande mise à jour avec succès vers : ${nextStatus}`,
             orderId,
             newStatus: nextStatus,
             mailSent,

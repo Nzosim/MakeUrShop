@@ -58,7 +58,7 @@
                     </v-stepper-header>
                 </v-stepper>
 
-                <div class="d-flex justify-end align-center mb-4" style="gap: 8px">
+                <div class="d-flex justify-end align-center mb-4 buttons-order" style="gap: 8px">
                     <v-btn
                         v-if="order.statut === 'payee'"
                         color="secondary"
@@ -69,10 +69,40 @@
                     >
                         Générer le bordereau
                     </v-btn>
-                    <v-btn v-if="canAdvanceStatus(order.statut)" color="primary" size="small" @click.stop="advanceOrderStatus(order)" :loading="updatingOrderId === order.id">
+
+                    <v-btn
+                        v-if="canRegressStatus(order.statut)"
+                        color="grey-darken-1"
+                        variant="outlined"
+                        size="small"
+                        @click.stop="updateOrderStatus(order, 'regress')"
+                        :disabled="updatingOrderId === order.id"
+                    >
+                        Étape précédente
+                    </v-btn>
+
+                    <v-btn
+                        v-if="canCancelStatus(order.statut)"
+                        color="error"
+                        variant="text"
+                        size="small"
+                        @click.stop="updateOrderStatus(order, 'cancel')"
+                        :disabled="updatingOrderId === order.id"
+                    >
+                        Annuler
+                    </v-btn>
+
+                    <v-btn
+                        v-if="canAdvanceStatus(order.statut)"
+                        color="primary"
+                        size="small"
+                        @click.stop="updateOrderStatus(order, 'advance')"
+                        :loading="updatingOrderId === order.id"
+                    >
                         {{ getNextStatusLabel(order.statut) }}
                     </v-btn>
-                    <span v-else class="text-grey text-caption">Commande finalisée</span>
+
+                    <span v-else-if="order.statut === 'livree'" class="text-grey text-caption">Commande finalisée</span>
                 </div>
 
                 <v-expand-transition>
@@ -257,10 +287,6 @@
 
     function changeOrder(id) {
         expandedOrder.value = expandedOrder.value === id ? null : id;
-    }
-
-    function canAdvanceStatus(status) {
-        return status !== 'livree' && status !== 'annulee';
     }
 
     function getNextStatusLabel(status) {
@@ -455,6 +481,42 @@
             updatingOrderId.value = null;
         }
     }
+
+    function canRegressStatus(status) {
+        return ['payee', 'expediee'].includes(status);
+    }
+
+    function canAdvanceStatus(status) {
+        return ['en_attente', 'payee', 'expediee'].includes(status);
+    }
+
+    function canCancelStatus(status) {
+        return status !== 'livree' && status !== 'annulee';
+    }
+
+    async function updateOrderStatus(order, action) {
+        try {
+            updatingOrderId.value = order.id;
+            const result = await $fetch('/api/order/updateOrderStatus', {
+                method: 'POST',
+                body: {
+                    orderId: order.id,
+                    action: action, // On passe l'action ici ('advance', 'regress', 'cancel')
+                },
+            });
+
+            if (result.success) {
+                const index = orders.value.findIndex((o) => o.id === order.id);
+                if (index !== -1) {
+                    orders.value[index].statut = result.newStatus;
+                }
+            }
+        } catch (error) {
+            console.error('Erreur lors de la mise à jour du statut:', error);
+        } finally {
+            updatingOrderId.value = null;
+        }
+    }
 </script>
 
 <style>
@@ -469,6 +531,9 @@
             gap: 16px;
         }
         .stepper {
+            flex-direction: column;
+        }
+        .buttons-order {
             flex-direction: column;
         }
     }
