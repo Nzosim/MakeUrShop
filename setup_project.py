@@ -22,7 +22,6 @@ image_about = dossier_app / "app" / "contents" / "about" / "timeline.png"
 env = racine / ".env"
 fichier_init_categories = racine / "db" / "init" / "init_categories.sql"
 
-# Cherche une info dans le fichier markdown avec une regex
 def chercher_md(pattern, texte, defaut=""):
     resultat = re.search(pattern, texte, re.MULTILINE)
     if resultat:
@@ -30,7 +29,6 @@ def chercher_md(pattern, texte, defaut=""):
     return defaut
 
 
-# Récupère seulement une partie du fichier, par exemple "Éditeur du site"
 def chercher_partie(texte, titre):
     pattern = rf"^## (?:\d+\. )?{re.escape(titre)}\n(.*?)(?=\n## (?:\d+\. )?|\Z)"
     resultat = re.search(pattern, texte, re.MULTILINE | re.DOTALL)
@@ -48,7 +46,6 @@ def recuperer_paragraphes(texte):
     return paragraphes
 
 
-# Si l'utilisateur appuie sur entrée, on garde la valeur par défaut
 def demander(question, defaut):
     reponse = input(f"{question} [{defaut}] : ").strip()
     if reponse == "":
@@ -67,7 +64,6 @@ def demander_nombre(question, defaut):
 
 
 def lire_ancienne_config():
-    # Le fichier peut être mal fermé, donc je lis aussi les valeurs avec des regex
     if not fichier_config.exists():
         return {}, ""
 
@@ -90,7 +86,6 @@ def categories_config(texte):
 
 
 def copier_image(label, destination):
-    # Si rien n'est écrit, on garde l'image déjà présente
     chemin = input(f"{label} - chemin de l'image [garder l'image actuelle] : ").strip()
     if chemin == "":
         print("Image conservée")
@@ -105,7 +100,6 @@ def copier_image(label, destination):
     print(f"Image copiée vers {destination}")
 
 
-# Formate la date du jour en français pour le markdown
 def date_du_jour():
     mois = [
         "janvier",
@@ -126,11 +120,9 @@ def date_du_jour():
 
 
 def configurer_mentions_legales():
-    # On vérifie si le fichier existe
     if not fichier_mentions.exists():
         raise RuntimeError(f"Le fichier des mentions légales est introuvable : {fichier_mentions}")
 
-    # Lecture du fichier actuel pour reprendre les anciennes valeurs par défaut
     contenu = fichier_mentions.read_text(encoding="utf-8")
     partie_editeur = chercher_partie(contenu, "Éditeur du site")
     partie_hebergeur = chercher_partie(contenu, "Hébergeur")
@@ -140,7 +132,6 @@ def configurer_mentions_legales():
     print("\nConfiguration des mentions légales")
     nom_site = demander("Nom du site", ancien_nom_site)
 
-    # Si le nom de société était le même que le nom du site, on garde cette logique
     ancien_nom_societe = chercher_md(
         r"- \*\*Nom de la société :\*\* (.+)$",
         partie_editeur,
@@ -152,7 +143,6 @@ def configurer_mentions_legales():
     else:
         nom_societe_defaut = ancien_nom_societe
 
-    # Questions pour la partie éditeur du site
     nom_societe = demander("Nom de la société", nom_societe_defaut)
     forme_juridique = demander(
         "Forme juridique",
@@ -174,7 +164,6 @@ def configurer_mentions_legales():
         chercher_md(r"- \*\*Directeur de la publication :\*\* (.+)$", partie_editeur),
     )
 
-    # Questions pour la partie hébergeur
     hebergeur = demander(
         "Nom de l'hébergeur",
         chercher_md(r"- \*\*Nom de l’hébergeur :\*\* (.+)$", partie_hebergeur, "OVH"),
@@ -192,7 +181,6 @@ def configurer_mentions_legales():
         chercher_md(r"- \*\*Site web :\*\* \[(.+)\]\(.+\)$", partie_hebergeur, "https://www.ovh.com"),
     )
 
-    # On reconstruit tout le fichier markdown avec les réponses
     nouveau_contenu = f"""# Mentions légales – {nom_site}
 
 **Dernière mise à jour : {date_du_jour()}**
@@ -245,13 +233,11 @@ Les présentes mentions légales sont régies par la **loi française**.
 En cas de litige, les tribunaux français sont seuls compétents.
 """
 
-    # Écriture du nouveau contenu dans le fichier
     fichier_mentions.write_text(nouveau_contenu, encoding="utf-8")
     print("Mentions légales mises à jour")
 
 
 def configurer_cgv():
-    # Même principe que les mentions légales, mais pour le fichier des CGV
     if not fichier_cgv.exists():
         raise RuntimeError(f"Le fichier des CGV est introuvable : {fichier_cgv}")
 
@@ -372,7 +358,6 @@ Merci de votre confiance et bonne navigation sur **{nom_boutique}**
 
 
 def configurer_description_marque():
-    # Description courte utilisée dans les pages communes
     if not fichier_description.exists():
         raise RuntimeError(f"Le fichier de description est introuvable : {fichier_description}")
 
@@ -417,7 +402,6 @@ def configurer_description_marque():
 
 
 def configurer_histoire_marque():
-    # Page about, avec l'histoire et la philosophie de la marque
     if not fichier_histoire.exists():
         raise RuntimeError(f"Le fichier d'histoire de marque est introuvable : {fichier_histoire}")
 
@@ -492,7 +476,6 @@ def configurer_histoire_marque():
 
 
 def configurer_politique_confidentialite():
-    # Politique de confidentialité du site
     if not fichier_confidentialite.exists():
         raise RuntimeError(f"Le fichier de confidentialité est introuvable : {fichier_confidentialite}")
 
@@ -580,7 +563,6 @@ La date de la dernière mise à jour sera toujours indiquée en haut du document
 
 
 def configurer_config_json():
-    # Fichier utilisé par le footer, la page contact et la config navbar
     ancienne_config, texte_config = lire_ancienne_config()
 
     contenu_cgv = fichier_cgv.read_text(encoding="utf-8") if fichier_cgv.exists() else ""
@@ -672,7 +654,6 @@ def configurer_config_json():
 
 
 def configurer_images():
-    # Les noms de fichiers restent les mêmes pour ne rien changer dans le code du site
     print("\nConfiguration des images")
     copier_image("Logo navbar", image_logo)
     copier_image("Image accueil 1", image_accueil_1)
@@ -681,7 +662,6 @@ def configurer_images():
 
 
 def installer_dependances():
-    # npm doit être installé pour pouvoir installer les dépendances du projet
     if shutil.which("npm") is None:
         raise RuntimeError("npm est introuvable. Installez Node.js/npm avant de relancer ce script")
 
@@ -690,7 +670,6 @@ def installer_dependances():
     print("Installation npm terminée")
 
 def configurer_env():
-    # Clés de base pour un site type e‑commerce Nuxt / backend
     cles = [
         "DB_HOST",
         "DB_USER",
@@ -700,7 +679,6 @@ def configurer_env():
         "MAIL_PASS",
     ]
 
-    # Valeurs par défaut
     defauts = {
         "DB_HOST": "db",
         "DB_USER": "root",
@@ -710,16 +688,13 @@ def configurer_env():
         "MAIL_PASS": "naebjbxchcnkdmef",
     }
 
-    # Lecture du fichier .env actuel
     if not env.exists():
-        # Si le fichier n’existe pas, on part sur les défauts
         valeurs = defauts.copy()
     else:
         contenu = env.read_text(encoding="utf-8")
         valeurs = {}
         for cle in cles:
             defaut = defauts[cle]
-            # On cherche `CLE=value` ou `CLE="value"`
             resultat = re.search(
                 rf"^{cle}\s*=\s*[\"']*([^\"'\n]+)[\"']*",
                 contenu,
@@ -732,14 +707,12 @@ def configurer_env():
 
     print("\nConfiguration du fichier .env")
 
-    # On demande les valeurs à l’utilisateur
     for cle in cles:
         defaut = valeurs[cle]
         reponse = input(f"{cle} [{defaut}] : ").strip()
         if reponse != "":
             valeurs[cle] = reponse
 
-    # Génération du nouveau contenu
     lignes = []
     for cle in cles:
         val = valeurs[cle]
@@ -752,10 +725,8 @@ def configurer_env():
 def configurer_bdd_categories():
     print("\nConfiguration des sous-catégories pour les catégories déjà définies dans config.json")
 
-    # Créer le dossier db/init si il n'existe pas
     fichier_init_categories.parent.mkdir(parents=True, exist_ok=True)
 
-    # Lire les catégories de config.json
     ancienne_config, texte_config = lire_ancienne_config()
     navbar_config = ancienne_config.get("config", {}).get("navBar", {})
     categories = navbar_config.get("names") or categories_config(texte_config)
@@ -765,7 +736,6 @@ def configurer_bdd_categories():
 
     print(f"Catégories trouvées dans config.json : {categories}")
 
-    # Si le fichier n'existe pas, on le crée avec le CREATE TABLE + INSERT
     if not fichier_init_categories.exists():
         contenu_actuel = (
             "-- Categories et sous-catégories\n"
@@ -786,7 +756,6 @@ def configurer_bdd_categories():
     else:
         contenu_actuel = fichier_init_categories.read_text(encoding="utf-8")
 
-    # 1. Pour chaque catégorie (déjà dans config.json), demander le nombre de sous-catégories et leurs noms
     categories_parentes = []
     for nom_cat in categories:
         categories_parentes.append({"nom": nom_cat, "sous_categories": []})
@@ -798,7 +767,6 @@ def configurer_bdd_categories():
             nom_sous = demander(f"Nom de la sous-catégorie {j + 1} pour '{nom_cat}'", defaut)
             categories_parentes[-1]["sous_categories"].append(nom_sous)
 
-    # 2. Trouver la partie INSERT INTO `category` ... jusqu'à le ";" final
     match_insert_category = re.search(
         r"(INSERT INTO `category` \(`id`, `name`, `category_parent_id`\) VALUES\n)(.*?)(;)\n",
         contenu_actuel,
@@ -831,17 +799,14 @@ def configurer_bdd_categories():
         )
         partie_apres = ""
 
-    # 3. Générer les nouvelles INSERT pour `category`
     insert_lines = []
     id_counter = 1
 
-    # Catégories parentes (category_parent_id = NULL)
     for cat in categories_parentes:
         line = f"({id_counter}, '{cat['nom']}', NULL)"
         insert_lines.append(line)
         id_counter += 1
 
-    # Sous-catégories (avec category_parent_id)
     for i, cat in enumerate(categories_parentes):
         parent_id = i + 1
         for sous in cat["sous_categories"]:
@@ -849,25 +814,22 @@ def configurer_bdd_categories():
             insert_lines.append(line)
             id_counter += 1
 
-    # Mettre des commas à la fin de chaque ligne sauf la dernière
     for i in range(len(insert_lines)):
         if i < len(insert_lines) - 1:
             insert_lines[i] += ","
 
     nouvelles_insert = debut_insert + "\n".join(insert_lines) + "\n;"
 
-    # 4. Reconstruire le fichier complet (CORRECTION : utiliser partie_avant)
     nouveau_contenu = partie_avant + nouvelles_insert + partie_apres
 
-    # 5. Écrire dans le fichier
     fichier_init_categories.write_text(nouveau_contenu, encoding="utf-8")
 
     print(f"Fichier d'initialisation des catégories modifié : {fichier_init_categories}")
+    print(f"Projet installé, lancez le avec la commande 'docker-compose up -d' depuis le dossier {dossier_racine}")
     
 
 def main():
     try:
-        # Configuration du projet
         configurer_env()
         configurer_mentions_legales()
         configurer_cgv()
